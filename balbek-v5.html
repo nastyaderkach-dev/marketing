@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balbek — Case Structure v5</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #faf9f7;
+  --ink: #17160f;
+  --mid: #9a9285;
+  --faint: #e8e4dc;
+  --accent: #c4622a;
+  --accent-pale: rgba(196,98,42,.07);
+  --green: #3a6b4e;
+  --blue: #2b5278;
+  --video-color: #7a4f8a;
+}
+body { background:var(--bg); color:var(--ink); font-family:'Jost',sans-serif; font-weight:300; }
+
+/* HEADER */
+header {
+  border-bottom:1px solid var(--faint);
+  padding:32px 64px;
+  display:flex; justify-content:space-between; align-items:flex-end;
+}
+.h-title { font-family:'Playfair Display',serif; font-size:34px; font-weight:400; line-height:1.1; }
+.h-title em { font-style:italic; color:var(--accent); }
+.h-eyebrow { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:var(--mid); margin-bottom:10px; }
+.h-right { font-family:'DM Mono',monospace; font-size:9px; color:var(--mid); text-align:right; line-height:2; }
+
+/* LAYOUT */
+.main { display:grid; grid-template-columns:72px 1fr 300px; }
+
+/* FUNNEL COL */
+.funnel-col {
+  border-right:1px solid var(--faint);
+  padding:48px 0;
+  position:sticky; top:0; height:100vh;
+  display:flex; flex-direction:column; align-items:center;
+}
+.funnel-label {
+  font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--mid); writing-mode:vertical-rl; transform:rotate(180deg); margin-bottom:16px;
+}
+.funnel-vis {
+  flex:1; width:100%; display:flex; flex-direction:column;
+  align-items:center; justify-content:space-around; padding:8px 0; position:relative;
+}
+.funnel-vis::before {
+  content:''; position:absolute; left:50%; top:0; bottom:0;
+  width:1px; background:var(--faint); transform:translateX(-50%);
+}
+.funnel-step {
+  position:relative; z-index:1;
+  display:flex; flex-direction:column; align-items:center; gap:3px; cursor:default;
+}
+.funnel-pct { font-family:'DM Mono',monospace; font-size:10px; color:var(--mid); transition:color .2s; }
+.funnel-bar-wrap { width:36px; height:3px; background:var(--faint); }
+.funnel-bar-fill { height:100%; background:var(--accent); opacity:.6; transition:opacity .2s; }
+.funnel-dot { width:7px; height:7px; border-radius:50%; border:1.5px solid var(--faint); background:var(--bg); transition:all .2s; }
+.funnel-step.active .funnel-dot { background:var(--accent); border-color:var(--accent); }
+.funnel-step.active .funnel-pct { color:var(--accent); }
+.funnel-step.active .funnel-bar-fill { opacity:1; }
+.funnel-fold {
+  position:relative; z-index:2; width:60px; margin:3px -6px;
+  background:var(--accent-pale);
+  border-top:1px dashed var(--accent); border-bottom:1px dashed var(--accent);
+  padding:4px 0; display:flex; align-items:center; justify-content:center;
+}
+.funnel-fold span {
+  font-family:'DM Mono',monospace; font-size:7px; letter-spacing:.1em; color:var(--accent);
+  writing-mode:vertical-rl; transform:rotate(180deg);
+}
+
+/* VIDEO BADGE on funnel */
+.funnel-video-dot {
+  position:relative; z-index:3;
+  width:18px; height:18px; border-radius:50%;
+  background:var(--video-color); opacity:.15;
+  display:flex; align-items:center; justify-content:center;
+  font-size:7px; color:white;
+  margin: -4px 0;
+}
+.funnel-video-dot.show { opacity:1; }
+
+/* CONTENT COL */
+.content-col { border-right:1px solid var(--faint); }
+
+.block {
+  border-bottom:1px solid var(--faint); padding:40px 56px;
+  transition:background .15s; position:relative;
+}
+.block:hover { background:rgba(23,22,15,.012); }
+.block.fold-above { border-left:3px solid var(--accent); }
+
+.block-head { display:flex; align-items:baseline; gap:16px; margin-bottom:18px; }
+.block-num { font-family:'DM Mono',monospace; font-size:10px; color:var(--mid); width:24px; flex-shrink:0; }
+.block-name { font-family:'Playfair Display',serif; font-size:21px; font-weight:400; line-height:1.1; }
+.block-name em { font-style:italic; color:var(--mid); }
+.block-reach { margin-left:auto; font-family:'DM Mono',monospace; font-size:12px; color:var(--accent); flex-shrink:0; }
+
+.block-desc { font-size:13px; line-height:1.8; color:var(--mid); margin-left:40px; margin-bottom:22px; max-width:580px; }
+.block-desc strong { color:var(--ink); font-weight:400; }
+
+/* VIDEO BADGE inline */
+.video-badge {
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.12em;
+  padding:4px 10px; border:1px solid; margin-left:40px; margin-bottom:20px;
+  color:var(--video-color); border-color:rgba(122,79,138,.3);
+  background:rgba(122,79,138,.05);
+}
+.video-badge::before { content:'▶'; font-size:8px; }
+
+/* SPEC TABLE */
+.spec-grid { margin-left:40px; display:grid; gap:1px; background:var(--faint); border:1px solid var(--faint); }
+.spec-row { background:var(--bg); display:grid; grid-template-columns:150px 1fr; }
+.spec-key {
+  padding:10px 16px; font-family:'DM Mono',monospace;
+  font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--mid);
+  border-right:1px solid var(--faint); display:flex; align-items:center;
+}
+.spec-val { padding:10px 16px; font-size:12px; color:var(--ink); line-height:1.6; }
+.spec-val.note { font-style:italic; color:var(--mid); }
+.spec-val code {
+  font-family:'DM Mono',monospace; font-size:11px;
+  background:var(--faint); padding:1px 6px; color:var(--accent);
+}
+
+/* SKETCH */
+.layout-sketch { margin-left:40px; margin-top:18px; display:flex; gap:2px; height:46px; }
+.sk {
+  border:1px solid var(--faint); display:flex; align-items:center; justify-content:center;
+  font-family:'DM Mono',monospace; font-size:9px; color:var(--mid);
+  background:rgba(23,22,15,.015); transition:background .15s;
+  text-align:center; letter-spacing:.05em;
+}
+.sk:hover { background:rgba(23,22,15,.04); }
+.sk.accent-sk { border-color:var(--accent); color:var(--accent); background:var(--accent-pale); }
+.sk.green-sk { border-color:var(--green); color:var(--green); background:rgba(58,107,78,.05); }
+.sk.video-sk { border-color:var(--video-color); color:var(--video-color); background:rgba(122,79,138,.05); }
+
+/* FOLD DIVIDER */
+.fold-divider {
+  display:flex; align-items:center; padding:0 56px; gap:16px; height:36px;
+  background:var(--accent-pale);
+  border-top:1px dashed var(--accent); border-bottom:1px dashed var(--accent);
+}
+.fold-divider-text { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); white-space:nowrap; }
+.fold-line { flex:1; height:1px; background:rgba(196,98,42,.2); }
+
+/* VIDEO CONTEXT NOTE */
+.video-context {
+  margin:16px 40px 0;
+  border-left:2px solid rgba(122,79,138,.3);
+  padding:10px 14px;
+  display:flex; gap:10px;
+}
+.vc-icon { font-size:13px; flex-shrink:0; }
+.vc-text { font-size:11.5px; color:var(--mid); line-height:1.7; }
+.vc-text strong { color:var(--ink); font-weight:400; }
+
+/* RIGHT COL */
+.right-col { padding:48px 36px; }
+.right-label {
+  font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.25em; text-transform:uppercase;
+  color:var(--mid); margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid var(--faint);
+}
+.right-section { margin-bottom:36px; }
+
+/* VIDEO MAP */
+.video-map { display:flex; flex-direction:column; gap:2px; }
+.vm-row {
+  display:grid; grid-template-columns:20px 1fr;
+  gap:12px; align-items:stretch;
+}
+.vm-line {
+  display:flex; flex-direction:column; align-items:center; gap:0;
+}
+.vm-dot { width:8px; height:8px; border-radius:50%; background:var(--video-color); flex-shrink:0; margin-top:4px; }
+.vm-trail { flex:1; width:1px; background:rgba(122,79,138,.2); }
+.vm-row:last-child .vm-trail { display:none; }
+.vm-card {
+  background:#fff; border:1px solid var(--faint); padding:14px 16px;
+  margin-bottom:2px;
+}
+.vm-block-ref {
+  font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--video-color); margin-bottom:5px;
+}
+.vm-title { font-size:12px; font-weight:400; color:var(--ink); margin-bottom:4px; }
+.vm-desc { font-size:10.5px; color:var(--mid); line-height:1.6; }
+.vm-why {
+  font-family:'DM Mono',monospace; font-size:9px; margin-top:6px;
+  padding:3px 8px; display:inline-block;
+}
+.why-purple { background:rgba(122,79,138,.08); color:var(--video-color); }
+.why-green { background:rgba(58,107,78,.07); color:var(--green); }
+.why-blue { background:rgba(43,82,120,.07); color:var(--blue); }
+
+/* AUDIENCE */
+.audience-rows { display:flex; flex-direction:column; gap:2px; }
+.aud-row {
+  display:flex; align-items:center; gap:10px;
+  padding:7px 10px; background:#fff; border:1px solid var(--faint);
+}
+.aud-pct { font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); width:32px; flex-shrink:0; text-align:right; }
+.aud-bar-wrap { flex:1; height:3px; background:var(--faint); }
+.aud-bar-fill { height:100%; background:var(--accent); opacity:.55; }
+.aud-label { font-size:11px; color:var(--mid); width:120px; flex-shrink:0; }
+.aud-video { font-size:10px; color:var(--video-color); }
+.aud-fold { font-family:'DM Mono',monospace; font-size:8px; color:var(--accent); background:var(--accent-pale); padding:4px 10px; text-align:center; border:1px dashed rgba(196,98,42,.3); }
+
+/* PRINCIPLES */
+.principles-list { display:flex; flex-direction:column; gap:0; }
+.princ { padding:12px 0; border-bottom:1px solid var(--faint); display:flex; gap:12px; }
+.princ:last-child { border-bottom:none; }
+.princ-num { font-family:'DM Mono',monospace; font-size:9px; color:var(--accent); flex-shrink:0; padding-top:1px; }
+.princ-title { font-size:12px; font-weight:400; margin-bottom:3px; }
+.princ-text { font-size:11px; color:var(--mid); line-height:1.6; }
+
+footer {
+  border-top:1px solid var(--faint); padding:18px 64px;
+  display:flex; justify-content:space-between;
+  font-family:'DM Mono',monospace; font-size:9px; color:var(--mid); letter-spacing:.12em;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="h-eyebrow">Balbek Bureau · Case Study · Structure v5</div>
+    <div class="h-title">Архітектура<br><em>сторінки кейсу</em></div>
+  </div>
+  <div class="h-right">v5.0 · 2025<br>Template / All projects<br>Відео розподілені по контексту</div>
+</header>
+
+<div class="main">
+
+  <!-- FUNNEL -->
+  <div class="funnel-col">
+    <div class="funnel-label">Scroll depth</div>
+    <div class="funnel-vis">
+
+      <div class="funnel-step active" data-block="b1">
+        <div class="funnel-pct">100%</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar-fill" style="width:100%"></div></div>
+        <div class="funnel-dot"></div>
+      </div>
+
+      <div class="funnel-fold"><span>fold</span></div>
+
+      <div class="funnel-step" data-block="b2">
+        <div class="funnel-pct">62%</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar-fill" style="width:62%"></div></div>
+        <div class="funnel-dot"></div>
+        <div class="funnel-video-dot show" title="Room Tour відео">▶</div>
+      </div>
+
+      <div class="funnel-step" data-block="b3">
+        <div class="funnel-pct">42%</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar-fill" style="width:42%"></div></div>
+        <div class="funnel-dot"></div>
+      </div>
+
+      <div class="funnel-step" data-block="b4">
+        <div class="funnel-pct">35%</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar-fill" style="width:35%"></div></div>
+        <div class="funnel-dot"></div>
+      </div>
+
+      <div class="funnel-step" data-block="b5">
+        <div class="funnel-pct">22%</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar-fill" style="width:22%"></div></div>
+        <div class="funnel-dot"></div>
+        <div class="funnel-video-dot show" title="Client Interview відео">▶</div>
+      </div>
+
+      <div class="funnel-step" data-block="b6">
+        <div class="funnel-pct">15%</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar-fill" style="width:15%"></div></div>
+        <div class="funnel-dot"></div>
+        <div class="funnel-video-dot show" title="Architect відео">▶</div>
+      </div>
+
+      <div class="funnel-step" data-block="b7">
+        <div class="funnel-pct">10%</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar-fill" style="width:10%"></div></div>
+        <div class="funnel-dot"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content-col">
+
+    <!-- 01 HERO -->
+    <div class="block fold-above" id="b1">
+      <div class="block-head">
+        <span class="block-num">01</span>
+        <span class="block-name">Hero — <em>перше враження</em></span>
+        <span class="block-reach">100%</span>
+      </div>
+      <div class="block-desc">
+        Повноекранне <strong>фонове відео — беззвучне, зациклене.</strong> Це не room tour — просто атмосфера. 15–30 секунд найкрасивіших кадрів. Назва, тип, місто, рік видні одразу. Одна кнопка: дивитись room tour.
+      </div>
+      <div class="spec-grid">
+        <div class="spec-row">
+          <div class="spec-key">Фонове відео</div>
+          <div class="spec-val">15–30 сек · muted · loop · autoplay. <strong>Не room tour</strong> — атмосферна нарізка найкращих кадрів.</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Метадані</div>
+          <div class="spec-val">Назва проекту · Тип · Місто · Рік · Площа m² — все видно без скролу</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">CTA</div>
+          <div class="spec-val"><code>↓ Дивитись проект</code> — плавний скрол до room tour. Більше нічого.</div>
+        </div>
+      </div>
+      <div class="layout-sketch">
+        <div class="sk" style="flex:4">ФОНОВЕ ВІДЕО (атмосфера, muted, loop)</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+          <div class="sk" style="flex:2;font-size:8px">назва<br>метадані</div>
+          <div class="sk accent-sk" style="flex:1;font-size:8px">↓ CTA</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOLD -->
+    <div class="fold-divider">
+      <div class="fold-line"></div>
+      <div class="fold-divider-text">Above the fold · нижче бачать ~62%</div>
+      <div class="fold-line"></div>
+    </div>
+
+    <!-- 02 ROOM TOUR -->
+    <div class="block" id="b2">
+      <div class="block-head">
+        <span class="block-num">02</span>
+        <span class="block-name">Room Tour — <em>занурення в простір</em></span>
+        <span class="block-reach">62%</span>
+      </div>
+      <div class="block-desc">
+        <strong>Повноцінне відео-занурення.</strong> Один фокус — простір. Жодного тексту навколо не треба, відео говорить само за себе. Найдовший час на сторінці — тут люди зупиняються.
+      </div>
+      <div class="video-badge">Room Tour · 3–5 хв · зі звуком</div>
+      <div class="spec-grid">
+        <div class="spec-row">
+          <div class="spec-key">Формат</div>
+          <div class="spec-val">Плавна зйомка з руху по всіх приміщеннях · ambient звук або музика · без коментаря</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Хронометраж</div>
+          <div class="spec-val">3–5 хв. Довше — глядач втрачає увагу. Коротше — не передає масштаб.</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Розташування</div>
+          <div class="spec-val note">Відео на всю ширину блоку. Нижче — коротка підпис: локація, рік. Більше нічого.</div>
+        </div>
+      </div>
+      <div class="video-context">
+        <div class="vc-icon">💡</div>
+        <div class="vc-text"><strong>Чому тут, а не в hero?</strong> У hero — атмосфера (беззвучна, пасивна). Тут — повне занурення зі звуком, за власним бажанням. Різні ролі, різний рівень залученості.</div>
+      </div>
+      <div class="layout-sketch">
+        <div class="sk video-sk" style="flex:1;height:100%;font-size:10px">▶ ROOM TOUR · повна ширина</div>
+      </div>
+    </div>
+
+    <!-- 03 CONCEPT -->
+    <div class="block" id="b3">
+      <div class="block-head">
+        <span class="block-num">03</span>
+        <span class="block-name">Концепція + <em>цифри</em></span>
+        <span class="block-reach">42%</span>
+      </div>
+      <div class="block-desc">
+        Максимум 150 слів — читається за 45 секунд. Ліворуч: ідея і виклик. Праворуч: 4 цифри. <strong>Найважливіша — результат клієнта після відкриття.</strong>
+      </div>
+      <div class="spec-grid">
+        <div class="spec-row">
+          <div class="spec-key">Текст (ліво)</div>
+          <div class="spec-val">≤ 150 слів. Структура: <code>ідея</code> → <code>виклик</code> → <code>рішення</code>. Без «гармонії» та «балансу».</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Метрики (право)</div>
+          <div class="spec-val">Площа m² · Тривалість проекту · Нагороди · <code>Результат клієнта +N%</code></div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Тон</div>
+          <div class="spec-val note">Конкретно і від першої особи. «Ми зробили X тому що Y» — а не «простір натхненний природою».</div>
+        </div>
+      </div>
+      <div class="layout-sketch">
+        <div class="sk" style="flex:2">Текст ідеї · ≤150 слів</div>
+        <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:2px">
+          <div class="sk" style="height:100%">m²</div>
+          <div class="sk" style="height:100%">міс</div>
+          <div class="sk green-sk" style="height:100%">+N%</div>
+          <div class="sk" style="height:100%">★</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 GALLERY -->
+    <div class="block" id="b4">
+      <div class="block-head">
+        <span class="block-num">04</span>
+        <span class="block-name">Галерея — <em>фотографії</em></span>
+        <span class="block-reach">35%</span>
+      </div>
+      <div class="block-desc">
+        5–8 фото, асиметрична сітка. <strong>Обов'язково одне фото з людьми</strong> — дає масштаб і емоційний контакт. Клік відкриває lightbox.
+      </div>
+      <div class="spec-grid">
+        <div class="spec-row">
+          <div class="spec-key">Hero shot</div>
+          <div class="spec-val">Широкий кут, весь простір — займає 2/3 сітки</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Detail shots</div>
+          <div class="spec-val">Матеріали впритул, меблі, деталі — показують якість виконання</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">People in space</div>
+          <div class="spec-val"><code>Обов'язково</code> — людина в кадрі дає масштаб і робить проект живим</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Evening mood</div>
+          <div class="spec-val">Атмосферне вечірнє фото — найбільше зберігають і репостять</div>
+        </div>
+      </div>
+      <div class="layout-sketch">
+        <div class="sk" style="flex:3;height:100%">Hero shot</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+          <div class="sk" style="flex:1">Detail</div>
+          <div class="sk green-sk" style="flex:1;font-size:8px">People</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+          <div class="sk" style="flex:1">Mat.</div>
+          <div class="sk" style="flex:1">Eve.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 CLIENT -->
+    <div class="block" id="b5">
+      <div class="block-head">
+        <span class="block-num">05</span>
+        <span class="block-name">Клієнт говорить — <em>відео-інтерв'ю</em></span>
+        <span class="block-reach">22%</span>
+      </div>
+      <div class="block-desc">
+        <strong>Хто досяг цього блоку — потенційний замовник.</strong> Клієнт відповідає на три питання: виклик → чому Balbek → результат після відкриття. Поряд — одна найсильніша цитата.
+      </div>
+      <div class="video-badge">Client Interview · 3–5 хв</div>
+      <div class="spec-grid">
+        <div class="spec-row">
+          <div class="spec-key">Три питання</div>
+          <div class="spec-val"><code>1.</code> Яка була задача? <code>2.</code> Чому обрали Balbek? <code>3.</code> Що змінилось після відкриття?</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Цитата поряд</div>
+          <div class="spec-val">Одне речення з відео — найсильніше і конкретне. Ім'я, посада, компанія.</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">CTA тут</div>
+          <div class="spec-val"><code>Обговорити проект →</code> — 22% хто дійшов сюди найближчі до звернення</div>
+        </div>
+      </div>
+      <div class="video-context">
+        <div class="vc-icon">💡</div>
+        <div class="vc-text"><strong>Чому тут, а не вище?</strong> Клієнт говорить після того як ви вже побачили простір і прочитали концепцію — його слова підтверджують те що ви вже відчули. Якби він був першим — ви б ще не мали контексту.</div>
+      </div>
+      <div class="layout-sketch">
+        <div class="sk video-sk" style="flex:1">▶ Відео-інтерв'ю · 3–5 хв</div>
+        <div class="sk green-sk" style="flex:1">" Цитата · Ім'я · Посада "</div>
+      </div>
+    </div>
+
+    <!-- 06 ARCHITECT -->
+    <div class="block" id="b6">
+      <div class="block-head">
+        <span class="block-num">06</span>
+        <span class="block-name">Архітектор — <em>голос бюро</em></span>
+        <span class="block-reach">15%</span>
+      </div>
+      <div class="block-desc">
+        Людяність Balbek Bureau. <strong>Архітектор від першої особи пояснює рішення.</strong> Якщо є відео — архітектор веде камеру по просторі й коментує. Якщо ні — текст у форматі трьох тез.
+      </div>
+      <div class="video-badge">Architect Walkthrough · 2–3 хв · опційно</div>
+      <div class="spec-grid">
+        <div class="spec-row">
+          <div class="spec-key">Виклик</div>
+          <div class="spec-val">Одне конкретне рішення яке визначило весь простір. «Ми зробили X тому що Y».</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Ключове рішення</div>
+          <div class="spec-val">Що в цьому проекті унікальне — матеріал, планування, деталь яку ніколи раніше не робили.</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Особиста пам'ять</div>
+          <div class="spec-val note">Одне речення що залишилось у пам'яті архітектора — робить кейс живим, а не корпоративним.</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">Відео (опційно)</div>
+          <div class="spec-val">Архітектор веде камеру по просторі, говорить без скрипту — <code>2–3 хв</code>. Найсильніший варіант.</div>
+        </div>
+      </div>
+      <div class="video-context">
+        <div class="vc-icon">💡</div>
+        <div class="vc-text"><strong>Чому тут, а не вище?</strong> Архітектор — фінальний шар глибини. Спочатку побачити простір, потім почути клієнта, і тільки тоді — голос автора. Це природна драматургія.</div>
+      </div>
+      <div class="layout-sketch">
+        <div class="sk" style="flex:0 0 52px;height:100%">фото</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+          <div class="sk" style="flex:1">Виклик</div>
+          <div class="sk" style="flex:1">Рішення</div>
+          <div class="sk" style="flex:1">Пам'ять</div>
+        </div>
+        <div class="sk video-sk" style="flex:0 0 84px;height:100%;font-size:8px">▶ Walk-<br>through<br>2–3 хв</div>
+      </div>
+    </div>
+
+    <!-- 07 NEXT -->
+    <div class="block" id="b7" style="border-bottom:none">
+      <div class="block-head">
+        <span class="block-num">07</span>
+        <span class="block-name">Наступний кейс + <em>фінальний CTA</em></span>
+        <span class="block-reach">10%</span>
+      </div>
+      <div class="block-desc">
+        <strong>Хто дійшов — найгарячіший потенційний клієнт.</strong> Перехід на наступний проект зменшує bounce rate. Фінальна кнопка «Обговорити проект» — для тих хто готовий.
+      </div>
+      <div class="spec-grid">
+        <div class="spec-row">
+          <div class="spec-key">Наступний кейс</div>
+          <div class="spec-val">Назва + тип + фото. Схожа категорія — якщо дивились ресторан, показувати схожий проект.</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-key">CTA</div>
+          <div class="spec-val"><code>Обговорити проект →</code> Тут і тільки тут — не «продавати» раніше.</div>
+        </div>
+      </div>
+      <div class="layout-sketch">
+        <div class="sk" style="flex:2">→ Назва наступного проекту</div>
+        <div class="sk accent-sk" style="flex:1;font-weight:400">Обговорити проект →</div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- RIGHT COL -->
+  <div class="right-col">
+
+    <div class="right-section">
+      <div class="right-label">Логіка розподілу відео</div>
+      <div class="video-map">
+        <div class="vm-row">
+          <div class="vm-line"><div class="vm-dot"></div><div class="vm-trail"></div></div>
+          <div class="vm-card">
+            <div class="vm-block-ref">Блок 01 — Hero</div>
+            <div class="vm-title">Фонове відео (muted)</div>
+            <div class="vm-desc">Атмосфера, петля, без звуку. Пасивне. Людина навіть не думає що дивиться відео.</div>
+            <div class="vm-why why-purple">Емоція · Пасивна</div>
+          </div>
+        </div>
+        <div class="vm-row">
+          <div class="vm-line"><div class="vm-dot"></div><div class="vm-trail"></div></div>
+          <div class="vm-card">
+            <div class="vm-block-ref">Блок 02 — Room Tour</div>
+            <div class="vm-title">Room Tour (зі звуком)</div>
+            <div class="vm-desc">Повне занурення за бажанням. Перший свідомий вибір — натиснути play. Найдовший час на сторінці.</div>
+            <div class="vm-why why-purple">Занурення · Активна дія</div>
+          </div>
+        </div>
+        <div class="vm-row">
+          <div class="vm-line"><div class="vm-dot"></div><div class="vm-trail"></div></div>
+          <div class="vm-card">
+            <div class="vm-block-ref">Блок 05 — Клієнт</div>
+            <div class="vm-title">Client Interview</div>
+            <div class="vm-desc">Після того як простір вже побачено — слова клієнта підтверджують відчуття. Відповідь на питання «чи можна довіряти?»</div>
+            <div class="vm-why why-green">Довіра · Після контексту</div>
+          </div>
+        </div>
+        <div class="vm-row">
+          <div class="vm-line"><div class="vm-dot"></div><div class="vm-trail"></div></div>
+          <div class="vm-card">
+            <div class="vm-block-ref">Блок 06 — Архітектор</div>
+            <div class="vm-title">Architect Walkthrough</div>
+            <div class="vm-desc">Фінальний шар глибини. Голос автора після того як ви вже знаєте простір і думку клієнта — природна драматургія.</div>
+            <div class="vm-why" style="background:rgba(43,82,120,.07);color:var(--blue)">Глибина · Фінальний акорд</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-section">
+      <div class="right-label">Аудиторія по глибині скролу</div>
+      <div class="audience-rows">
+        <div class="aud-row">
+          <div class="aud-pct">100%</div>
+          <div class="aud-bar-wrap"><div class="aud-bar-fill" style="width:100%"></div></div>
+          <div class="aud-label">Hero</div>
+        </div>
+        <div class="aud-fold">38% виходять після hero</div>
+        <div class="aud-row">
+          <div class="aud-pct">62%</div>
+          <div class="aud-bar-wrap"><div class="aud-bar-fill" style="width:62%"></div></div>
+          <div class="aud-label">Room Tour ▶</div>
+        </div>
+        <div class="aud-row">
+          <div class="aud-pct">42%</div>
+          <div class="aud-bar-wrap"><div class="aud-bar-fill" style="width:42%"></div></div>
+          <div class="aud-label">Концепція</div>
+        </div>
+        <div class="aud-row">
+          <div class="aud-pct">35%</div>
+          <div class="aud-bar-wrap"><div class="aud-bar-fill" style="width:35%"></div></div>
+          <div class="aud-label">Галерея</div>
+        </div>
+        <div class="aud-row">
+          <div class="aud-pct">22%</div>
+          <div class="aud-bar-wrap"><div class="aud-bar-fill" style="width:22%"></div></div>
+          <div class="aud-label">Клієнт ▶</div>
+        </div>
+        <div class="aud-row">
+          <div class="aud-pct">15%</div>
+          <div class="aud-bar-wrap"><div class="aud-bar-fill" style="width:15%"></div></div>
+          <div class="aud-label">Архітектор ▶</div>
+        </div>
+        <div class="aud-row">
+          <div class="aud-pct">10%</div>
+          <div class="aud-bar-wrap"><div class="aud-bar-fill" style="width:10%"></div></div>
+          <div class="aud-label">Наступний кейс</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-section">
+      <div class="right-label">Ключові принципи</div>
+      <div class="principles-list">
+        <div class="princ">
+          <div class="princ-num">P1</div>
+          <div class="princ-body">
+            <div class="princ-title">Кожен блок самодостатній</div>
+            <div class="princ-text">Зупинись де завгодно — вже отримав цінність.</div>
+          </div>
+        </div>
+        <div class="princ">
+          <div class="princ-num">P2</div>
+          <div class="princ-body">
+            <div class="princ-title">Відео живе в контексті</div>
+            <div class="princ-text">Кожне відео там де воно підсилює сусідній контент — не в окремому «відео-блоці».</div>
+          </div>
+        </div>
+        <div class="princ">
+          <div class="princ-num">P3</div>
+          <div class="princ-body">
+            <div class="princ-title">Драматургія знизу вгору</div>
+            <div class="princ-text">Спочатку — простір. Потім — клієнт. Потім — автор. Природний порядок довіри.</div>
+          </div>
+        </div>
+        <div class="princ">
+          <div class="princ-num">P4</div>
+          <div class="princ-body">
+            <div class="princ-title">CTA тільки наприкінці</div>
+            <div class="princ-text">Не «продавати» на кожному блоці. Один CTA — для тих хто вже готовий.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  <span>Balbek Bureau · Case Study Structure · balbek.com</span>
+  <span>v5.0 · 2025 · Internal</span>
+</footer>
+
+<script>
+const blocks = document.querySelectorAll('.block[id]');
+const steps = {};
+document.querySelectorAll('.funnel-step[data-block]').forEach(el => {
+  steps[el.dataset.block] = el;
+});
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      Object.values(steps).forEach(s => s.classList.remove('active'));
+      const s = steps[e.target.id];
+      if (s) s.classList.add('active');
+    }
+  });
+}, { threshold: 0.45 });
+blocks.forEach(b => obs.observe(b));
+</script>
+</body>
+</html>
