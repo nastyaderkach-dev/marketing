@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Місячне планування маркетингу — 4Service</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Manrope', sans-serif; background: #edf0f6;
+  min-height: 100vh; display: flex; align-items: flex-start;
+  justify-content: center; padding: 48px 20px 64px;
+}
+.frame { width: 860px; background: #fff; border-radius: 3px; overflow: hidden; box-shadow: 0 12px 56px rgba(1,33,105,0.13); }
+.top-bar { height: 5px; background: linear-gradient(90deg, #012169 0%, #0057c8 55%, #00b4d8 100%); }
+.inner { padding: 52px 60px 56px; }
+.brand-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+.brand-label { font-size: 10.5px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: #0057c8; }
+.dept-label { font-size: 10.5px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa5b8; }
+.divider { height: 1px; background: linear-gradient(90deg, #012169 0%, #dde3ef 55%); margin-bottom: 36px; }
+h1 { font-family: 'Playfair Display', serif; font-size: 34px; color: #0d1b2e; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.01em; }
+.subtitle { font-size: 14px; color: #5a6678; line-height: 1.65; margin-bottom: 48px; max-width: 580px; }
+.sec-label { font-size: 10px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #0057c8; margin-bottom: 16px; }
+
+/* CYCLE */
+.cycle { display: grid; grid-template-columns: repeat(4, 1fr); border: 1.5px solid #dde3ef; border-radius: 6px; overflow: hidden; margin-bottom: 44px; }
+.phase { padding: 20px 18px 22px; border-right: 1px solid #dde3ef; position: relative; }
+.phase:last-child { border-right: none; }
+.phase-bar { height: 3px; position: absolute; top: 0; left: 0; right: 0; }
+.phase-when { font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa5b8; margin-top: 10px; margin-bottom: 6px; }
+.phase-title { font-size: 13px; font-weight: 800; color: #0d1b2e; margin-bottom: 12px; line-height: 1.3; }
+.phase-items { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.phase-items li { font-size: 12px; color: #4f5b72; padding-left: 13px; position: relative; line-height: 1.45; }
+.phase-items li::before { content: ''; position: absolute; left: 0; top: 6px; width: 5px; height: 5px; border-radius: 50%; }
+.phase-rule { margin-top: 12px; padding: 8px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; line-height: 1.4; }
+.ph1 .phase-bar { background: linear-gradient(90deg,#012169,#0057c8); }
+.ph1 .phase-items li::before { background: #0057c8; }
+.ph1 .phase-rule { background: #eef3fc; color: #0057c8; }
+.ph2 .phase-bar { background: linear-gradient(90deg,#0057c8,#00b4d8); }
+.ph2 .phase-items li::before { background: #00b4d8; }
+.ph2 .phase-rule { background: #e8f9fd; color: #007fa3; }
+.ph3 .phase-bar { background: linear-gradient(90deg,#00b4d8,#00c48c); }
+.ph3 .phase-items li::before { background: #00c48c; }
+.ph3 .phase-rule { background: #e8faf4; color: #009965; }
+.ph4 .phase-bar { background: linear-gradient(90deg,#00c48c,#012169); }
+.ph4 .phase-items li::before { background: #012169; }
+.ph4 .phase-rule { background: #eef3fc; color: #012169; }
+
+/* CARDS */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 44px; }
+.card { border: 1.5px solid #dde3ef; border-radius: 6px; padding: 24px 22px 22px; position: relative; overflow: hidden; transition: border-color 0.18s; }
+.card:hover { border-color: #0057c8; }
+.card-stripe { position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
+.card-num { font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #0057c8; margin-bottom: 7px; }
+.card h3 { font-size: 14.5px; font-weight: 800; color: #0d1b2e; margin-bottom: 10px; line-height: 1.3; }
+.card p { font-size: 12.5px; color: #5a6678; line-height: 1.65; }
+.card-full { border: 1.5px solid #dde3ef; border-radius: 6px; padding: 24px 26px 26px; position: relative; overflow: hidden; margin-bottom: 44px; transition: border-color 0.18s; }
+.card-full:hover { border-color: #0057c8; }
+.card-full h3 { font-size: 14.5px; font-weight: 800; color: #0d1b2e; margin-bottom: 16px; }
+.steps { display: flex; flex-direction: column; gap: 11px; }
+.step { display: flex; align-items: flex-start; gap: 13px; }
+.step-dot { width: 22px; height: 22px; min-width: 22px; border-radius: 50%; background: #eef3fc; border: 1.5px solid #0057c8; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #0057c8; margin-top: 1px; }
+.step-text { font-size: 13px; color: #3a4558; line-height: 1.55; }
+.step-text strong { color: #0d1b2e; font-weight: 700; }
+
+/* TZ */
+.tz-wrap { border: 1.5px solid #dde3ef; border-radius: 6px; overflow: hidden; margin-bottom: 28px; }
+.tz-block-header { display: flex; align-items: center; gap: 12px; padding: 14px 22px; border-bottom: 1px solid #dde3ef; cursor: pointer; user-select: none; transition: background 0.15s; }
+.tz-block-header:hover { background: #f8faff; }
+.tz-block-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.tz-block-title { font-size: 13px; font-weight: 800; color: #0d1b2e; flex: 1; }
+.tz-block-sub { font-size: 11.5px; color: #9aa5b8; }
+.tz-chevron { font-size: 11px; color: #9aa5b8; transition: transform 0.2s; }
+.tz-block-header.open .tz-chevron { transform: rotate(180deg); }
+.tz-body { display: none; padding: 4px 0 8px; }
+.tz-body.open { display: block; }
+.tz-row { display: grid; grid-template-columns: 200px 1fr 76px; align-items: start; gap: 12px; padding: 11px 22px; border-bottom: 1px solid #f2f4f9; }
+.tz-row:last-child { border-bottom: none; }
+.tz-field-name { font-size: 12.5px; font-weight: 700; color: #0d1b2e; padding-top: 8px; line-height: 1.4; }
+
+/* INPUTS */
+.tz-input, .tz-textarea, .tz-select {
+  width: 100%; font-family: 'Manrope', sans-serif; font-size: 12.5px; color: #0d1b2e;
+  background: #f7f9fc; border: 1.5px solid #dde3ef; border-radius: 5px;
+  padding: 7px 11px; transition: border-color 0.15s, background 0.15s; outline: none;
+}
+.tz-input:focus, .tz-textarea:focus, .tz-select:focus { border-color: #0057c8; background: #fff; box-shadow: 0 0 0 3px rgba(0,87,200,0.08); }
+.tz-input::placeholder, .tz-textarea::placeholder { color: #b0bac8; }
+.tz-textarea { resize: vertical; min-height: 60px; line-height: 1.5; }
+.tz-select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa5b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+.tz-input.missing, .tz-textarea.missing, .tz-select.missing { border-color: #e84855; background: #fff8f8; }
+
+/* RADIO / CHECKBOX */
+.radio-group { display: flex; flex-direction: column; gap: 5px; padding-top: 4px; }
+.radio-opt { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #3a4558; cursor: pointer; padding: 5px 8px; border-radius: 4px; border: 1.5px solid transparent; transition: all 0.12s; }
+.radio-opt:hover { background: #f7f9fc; border-color: #dde3ef; }
+.radio-opt input[type=radio] { accent-color: #0057c8; width: 14px; height: 14px; cursor: pointer; }
+.radio-opt.selected { background: #eef3fc; border-color: #c0d3f5; }
+.check-group { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 4px; }
+.check-opt { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #3a4558; cursor: pointer; padding: 4px 10px; border-radius: 20px; border: 1.5px solid #dde3ef; background: #f7f9fc; transition: all 0.12s; }
+.check-opt:hover { border-color: #0057c8; }
+.check-opt input[type=checkbox] { accent-color: #0057c8; cursor: pointer; }
+.check-opt.selected { background: #eef3fc; border-color: #0057c8; color: #0057c8; font-weight: 600; }
+
+.badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; text-align: center; margin-top: 6px; white-space: nowrap; }
+.req { background: #fff0f0; color: #d63031; }
+.opt { background: #eef3fc; color: #0057c8; }
+
+/* ACTION BAR */
+.action-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding: 16px 20px; background: #f4f6fb; border: 1.5px solid #dde3ef; border-radius: 6px; gap: 12px; flex-wrap: wrap; }
+.action-bar-left { font-size: 12px; color: #6b7a96; line-height: 1.5; }
+.action-bar-left strong { color: #0d1b2e; }
+.btn-group { display: flex; gap: 10px; flex-shrink: 0; }
+.btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 5px; font-family: 'Manrope', sans-serif; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; transition: all 0.15s; }
+.btn-primary { background: #0057c8; color: #fff; }
+.btn-primary:hover { background: #004bb0; }
+.btn-outline { background: #fff; color: #0057c8; border: 1.5px solid #0057c8; }
+.btn-outline:hover { background: #eef3fc; }
+.btn-ghost { background: transparent; color: #6b7a96; border: 1.5px solid #dde3ef; }
+.btn-ghost:hover { background: #f4f6fb; color: #0d1b2e; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: #012169; color: #fff; padding: 12px 24px; border-radius: 6px; font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* FOOTER */
+.footer-row { display: flex; align-items: center; justify-content: space-between; padding-top: 22px; border-top: 1px solid #dde3ef; }
+.footer-note { font-size: 11px; color: #b4bccc; letter-spacing: 0.04em; }
+.tag { background: #eef3fc; color: #0057c8; font-size: 10.5px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 13px; border-radius: 3px; }
+
+@media print {
+  body { background: #fff; padding: 0; }
+  .frame { box-shadow: none; width: 100%; }
+  .action-bar { display: none; }
+  .tz-body { display: block !important; }
+}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="top-bar"></div>
+  <div class="inner">
+
+    <div class="brand-row">
+      <span class="brand-label">4Service Group</span>
+      <span class="dept-label">Відділ маркетингу</span>
+    </div>
+    <div class="divider"></div>
+    <h1>Місячне планування<br>маркетингу</h1>
+    <p class="subtitle">Впроваджуємо регулярне місячне планування. На початку кожного місяця — збір потреб від команд: що потрібно, коли і в якому обсязі. Обов'язкова умова: кожен запит подається разом із заповненим ТЗ.</p>
+
+    <!-- 01 ЦИКЛ -->
+    <div class="sec-label">01 — Місячний цикл планування</div>
+    <div class="cycle">
+      <div class="phase ph1">
+        <div class="phase-bar"></div>
+        <div class="phase-when">25–30 попереднього місяця</div>
+        <div class="phase-title">📥 Збір потреб</div>
+        <ul class="phase-items">
+          <li>Маркетинг розсилає нагадування всім командам</li>
+          <li>Команди заповнюють ТЗ і подають запити</li>
+          <li>Форма запиту — єдиний канал прийому задач</li>
+          <li>Дедлайн подачі: 30-е число</li>
+          <li>Запити без ТЗ не беруться в роботу</li>
+        </ul>
+        <div class="phase-rule">📌 Без ТЗ — задачі немає</div>
+      </div>
+      <div class="phase ph2">
+        <div class="phase-bar"></div>
+        <div class="phase-when">1–3-є число</div>
+        <div class="phase-title">📐 Планування</div>
+        <ul class="phase-items">
+          <li>Консолідація всіх запитів у єдиний план</li>
+          <li>Оцінка ресурсу та реального обсягу задач</li>
+          <li>Розподіл пріоритетів: 🔴 терм. / 🟡 план. / 🟢 черга</li>
+          <li>Погодження плану з керівником</li>
+          <li>Комунікація плану до команд-ініціаторів</li>
+        </ul>
+        <div class="phase-rule">📌 План публікуємо до 3-го числа</div>
+      </div>
+      <div class="phase ph3">
+        <div class="phase-bar"></div>
+        <div class="phase-when">4–25-е число</div>
+        <div class="phase-title">⚙️ Виконання</div>
+        <ul class="phase-items">
+          <li>Реалізація задач відповідно до плану</li>
+          <li>Weekly check-in щоп'ятниці (15 хв)</li>
+          <li>Нові термінові запити — тільки з ТЗ + обґрунтуванням</li>
+          <li>Оновлення статусів у зведеному плані</li>
+          <li>До 2 раундів правок на задачу за замовчуванням</li>
+        </ul>
+        <div class="phase-rule">📌 Позапланове = обґрунтування</div>
+      </div>
+      <div class="phase ph4">
+        <div class="phase-bar"></div>
+        <div class="phase-when">26–28-е число</div>
+        <div class="phase-title">📈 Підсумки</div>
+        <ul class="phase-items">
+          <li>Ретроспектива: що виконано / що ні</li>
+          <li>Причини незакритих задач → перенос або скасування</li>
+          <li>Фіксуємо % запитів, поданих з ТЗ</li>
+          <li>Короткий звіт керівнику (1 сторінка)</li>
+          <li>Старт збору потреб на наступний місяць</li>
+        </ul>
+        <div class="phase-rule">📌 Звіт керівнику до 28-го</div>
+      </div>
+    </div>
+
+    <!-- 02 ПРИНЦИПИ -->
+    <div class="sec-label">02 — Ключові принципи</div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-stripe" style="background:linear-gradient(90deg,#012169,#0057c8)"></div>
+        <div class="card-num">Принцип А</div>
+        <h3>Обов'язкове ТЗ</h3>
+        <p>Повертаємо практику обов'язкового технічного завдання для <em>кожного</em> запиту. Задача без ТЗ не береться в роботу — незалежно від терміновості чи посади ініціатора.</p>
+      </div>
+      <div class="card">
+        <div class="card-stripe" style="background:linear-gradient(90deg,#0057c8,#00b4d8)"></div>
+        <div class="card-num">Принцип Б</div>
+        <h3>Консолідований план</h3>
+        <p>Щомісяця формуємо єдиний маркетинговий план із усіма активностями, дедлайнами та відповідальними. Єдине джерело правди для всіх команд.</p>
+      </div>
+    </div>
+
+    <!-- 03 БРЕНДУВАННЯ -->
+    <div class="sec-label">03 — Новий формат брендування презентацій</div>
+    <div class="card-full">
+      <div class="card-stripe" style="background:linear-gradient(90deg,#012169,#00b4d8)"></div>
+      <h3>Дизайнер готує шаблон — команди оформлюють самі</h3>
+      <div class="steps">
+        <div class="step"><div class="step-dot">1</div><div class="step-text"><strong>Дизайнер</strong> готує 3–5 базових брендованих слайдів-шаблонів один раз (оновлення раз на рік).</div></div>
+        <div class="step"><div class="step-dot">2</div><div class="step-text"><strong>Матеріали команд</strong> — внутрішні звіти, статус-апдейти, навчальні брифи — оформлюються самостійно за шаблоном, без залучення маркетингу.</div></div>
+        <div class="step"><div class="step-dot">3</div><div class="step-text"><strong>Маркетинг</strong> дизайнить тільки зовнішні матеріали: тендери, клієнтські пропозиції, конференції, case studies, master deck.</div></div>
+      </div>
+    </div>
+
+    <!-- 04 ТЗ -->
+    <div class="sec-label">04 — Заповнити технічне завдання на маркетинговий запит</div>
+
+    <div class="action-bar">
+      <div class="action-bar-left">Заповніть всі обов'язкові поля і натисніть <strong>«Скопіювати ТЗ»</strong> — отримаєте готовий текст для відправки в маркетинг.<br>Дані зберігаються автоматично у вашому браузері.</div>
+      <div class="btn-group">
+        <button class="btn btn-ghost" onclick="clearForm()">🗑 Очистити</button>
+        <button class="btn btn-outline" onclick="window.print()">🖨 Друк</button>
+        <button class="btn btn-primary" onclick="copyTZ()">📋 Скопіювати ТЗ</button>
+      </div>
+    </div>
+
+    <div class="tz-wrap">
+
+      <!-- BLOCK 1 -->
+      <div class="tz-block-header open" onclick="tog(this)">
+        <div class="tz-block-num" style="background:#012169">1</div>
+        <div class="tz-block-title">Загальна інформація</div>
+        <div class="tz-block-sub">Назва, ініціатор, дедлайн, тип задачі</div>
+        <span class="tz-chevron">▲</span>
+      </div>
+      <div class="tz-body open">
+        <div class="tz-row">
+          <div class="tz-field-name">Назва запиту / проєкту</div>
+          <input class="tz-input" id="f_name" placeholder="Напр.: Презентація для тендеру Vodafone — травень 2025" oninput="save()">
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Ініціатор / команда</div>
+          <input class="tz-input" id="f_initiator" placeholder="Ім'я, відділ, email або Telegram" oninput="save()">
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Дата подачі ТЗ</div>
+          <input class="tz-input" id="f_date_submit" type="date" oninput="save()">
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Дедлайн (фінальний результат)</div>
+          <input class="tz-input" id="f_deadline" type="date" oninput="save()">
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Тип задачі</div>
+          <div class="check-group" id="f_type">
+            <label class="check-opt"><input type="checkbox" value="Дизайн" onchange="toggleCheck(this);save()"> Дизайн</label>
+            <label class="check-opt"><input type="checkbox" value="Копірайт" onchange="toggleCheck(this);save()"> Копірайт</label>
+            <label class="check-opt"><input type="checkbox" value="SMM" onchange="toggleCheck(this);save()"> SMM</label>
+            <label class="check-opt"><input type="checkbox" value="Event" onchange="toggleCheck(this);save()"> Event</label>
+            <label class="check-opt"><input type="checkbox" value="Відео" onchange="toggleCheck(this);save()"> Відео</label>
+            <label class="check-opt"><input type="checkbox" value="Поліграфія" onchange="toggleCheck(this);save()"> Поліграфія</label>
+            <label class="check-opt"><input type="checkbox" value="Реклама" onchange="toggleCheck(this);save()"> Реклама</label>
+            <label class="check-opt"><input type="checkbox" value="Інше" onchange="toggleCheck(this);save()"> Інше</label>
+          </div>
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Пріоритет запиту</div>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="priority" value="🔴 Терміново (зовнішній клієнт)" onchange="toggleRadio(this);save()"> 🔴 Терміново — зовнішній клієнт</label>
+            <label class="radio-opt"><input type="radio" name="priority" value="🟡 Планово" onchange="toggleRadio(this);save()"> 🟡 Планово — в місячний план</label>
+            <label class="radio-opt"><input type="radio" name="priority" value="🟢 Може почекати" onchange="toggleRadio(this);save()"> 🟢 Може почекати</label>
+          </div>
+          <span class="badge req">Обов'язк.</span>
+        </div>
+      </div>
+
+      <!-- BLOCK 2 -->
+      <div class="tz-block-header" onclick="tog(this)" style="border-top:1px solid #dde3ef">
+        <div class="tz-block-num" style="background:#0057c8">2</div>
+        <div class="tz-block-title">Ціль та аудиторія</div>
+        <div class="tz-block-sub">Мета, ЦА, ключове повідомлення</div>
+        <span class="tz-chevron">▼</span>
+      </div>
+      <div class="tz-body">
+        <div class="tz-row">
+          <div class="tz-field-name">Мета матеріалу</div>
+          <textarea class="tz-textarea" id="f_goal" placeholder="Що має зробити / відчути / зрозуміти аудиторія після контакту з матеріалом?" oninput="save()"></textarea>
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Цільова аудиторія</div>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="audience" value="Внутрішня команда" onchange="toggleRadio(this);save()"> Внутрішня команда</label>
+            <label class="radio-opt"><input type="radio" name="audience" value="Клієнт" onchange="toggleRadio(this);save()"> Клієнт</label>
+            <label class="radio-opt"><input type="radio" name="audience" value="Партнер" onchange="toggleRadio(this);save()"> Партнер</label>
+            <label class="radio-opt"><input type="radio" name="audience" value="ЗМІ / публічна аудиторія" onchange="toggleRadio(this);save()"> ЗМІ / публічна аудиторія</label>
+          </div>
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Ключове повідомлення</div>
+          <input class="tz-input" id="f_message" placeholder="Одне речення: що найголовніше передати цією задачею?" oninput="save()">
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Референси / конкуренти</div>
+          <textarea class="tz-textarea" id="f_refs" placeholder="Що робили раніше? Посилання на приклади, що подобаються" oninput="save()"></textarea>
+          <span class="badge opt">Бажано</span>
+        </div>
+      </div>
+
+      <!-- BLOCK 3 -->
+      <div class="tz-block-header" onclick="tog(this)" style="border-top:1px solid #dde3ef">
+        <div class="tz-block-num" style="background:#00b4d8">3</div>
+        <div class="tz-block-title">Вимоги до матеріалу</div>
+        <div class="tz-block-sub">Формат, обсяг, мова, брендинг</div>
+        <span class="tz-chevron">▼</span>
+      </div>
+      <div class="tz-body">
+        <div class="tz-row">
+          <div class="tz-field-name">Формат / канал</div>
+          <div class="check-group" id="f_format">
+            <label class="check-opt"><input type="checkbox" value="PPTX" onchange="toggleCheck(this);save()"> PPTX</label>
+            <label class="check-opt"><input type="checkbox" value="PDF" onchange="toggleCheck(this);save()"> PDF</label>
+            <label class="check-opt"><input type="checkbox" value="Instagram 1080×1080" onchange="toggleCheck(this);save()"> Instagram</label>
+            <label class="check-opt"><input type="checkbox" value="Банер" onchange="toggleCheck(this);save()"> Банер</label>
+            <label class="check-opt"><input type="checkbox" value="Email" onchange="toggleCheck(this);save()"> Email</label>
+            <label class="check-opt"><input type="checkbox" value="Roll-up" onchange="toggleCheck(this);save()"> Roll-up</label>
+            <label class="check-opt"><input type="checkbox" value="Інше" onchange="toggleCheck(this);save()"> Інше</label>
+          </div>
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Обсяг</div>
+          <input class="tz-input" id="f_volume" placeholder="Кількість слайдів / сторінок / форматів / варіантів дизайну" oninput="save()">
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Мова(-и)</div>
+          <div class="check-group" id="f_lang">
+            <label class="check-opt"><input type="checkbox" value="Українська" onchange="toggleCheck(this);save()"> 🇺🇦 Українська</label>
+            <label class="check-opt"><input type="checkbox" value="Англійська" onchange="toggleCheck(this);save()"> 🇬🇧 Англійська</label>
+            <label class="check-opt"><input type="checkbox" value="Польська" onchange="toggleCheck(this);save()"> 🇵🇱 Польська</label>
+            <label class="check-opt"><input type="checkbox" value="Інша" onchange="toggleCheck(this);save()"> Інша</label>
+          </div>
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Брендинг</div>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="brand" value="4Service бренд" onchange="toggleRadio(this);save()"> 4Service бренд</label>
+            <label class="radio-opt"><input type="radio" name="brand" value="Кастомний для клієнта" onchange="toggleRadio(this);save()"> Кастомний для клієнта</label>
+            <label class="radio-opt"><input type="radio" name="brand" value="Co-брендинг" onchange="toggleRadio(this);save()"> Co-брендинг</label>
+          </div>
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Стиль і тон</div>
+          <select class="tz-select" id="f_tone" onchange="save()">
+            <option value="">— оберіть стиль —</option>
+            <option>Офіційний</option>
+            <option>Дружній</option>
+            <option>Презентаційний</option>
+            <option>Продажний</option>
+            <option>Нейтральний / інформаційний</option>
+          </select>
+          <span class="badge opt">Бажано</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Технічні обмеження</div>
+          <textarea class="tz-textarea" id="f_tech" placeholder="Ліміт розміру файлу, вимоги до друку, платформа публікації" oninput="save()"></textarea>
+          <span class="badge opt">Бажано</span>
+        </div>
+      </div>
+
+      <!-- BLOCK 4 -->
+      <div class="tz-block-header" onclick="tog(this)" style="border-top:1px solid #dde3ef">
+        <div class="tz-block-num" style="background:#00c48c">4</div>
+        <div class="tz-block-title">Контент та матеріали</div>
+        <div class="tz-block-sub">Тексти, фото, логотипи, референси</div>
+        <span class="tz-chevron">▼</span>
+      </div>
+      <div class="tz-body">
+        <div class="tz-row">
+          <div class="tz-field-name">Готові тексти / тезиси</div>
+          <textarea class="tz-textarea" id="f_texts" placeholder="Посилання на Google Doc / файл / «немає — потрібен копірайтинг»" oninput="save()"></textarea>
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Логотипи / бренд-матеріали</div>
+          <input class="tz-input" id="f_logos" placeholder="Посилання на папку / «використати брендбук 4Service» / «є у клієнта»" oninput="save()">
+          <span class="badge opt">Бажано</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Фото / ілюстрації</div>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="photos" value="Готові фото надані" onchange="toggleRadio(this);save()"> Готові фото надані</label>
+            <label class="radio-opt"><input type="radio" name="photos" value="Потрібен підбір стоку" onchange="toggleRadio(this);save()"> Потрібен підбір стоку</label>
+            <label class="radio-opt"><input type="radio" name="photos" value="Потрібна фотосесія" onchange="toggleRadio(this);save()"> Потрібна фотосесія</label>
+            <label class="radio-opt"><input type="radio" name="photos" value="Фото не потрібні" onchange="toggleRadio(this);save()"> Фото не потрібні</label>
+          </div>
+          <span class="badge opt">Бажано</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Референси стилю</div>
+          <textarea class="tz-textarea" id="f_style_refs" placeholder="Посилання або файли з прикладами того, що подобається" oninput="save()"></textarea>
+          <span class="badge opt">Бажано</span>
+        </div>
+      </div>
+
+      <!-- BLOCK 5 -->
+      <div class="tz-block-header" onclick="tog(this)" style="border-top:1px solid #dde3ef">
+        <div class="tz-block-num" style="background:#ff8c42">5</div>
+        <div class="tz-block-title">Погодження та правки</div>
+        <div class="tz-block-sub">Відповідальний, раунди правок, бюджет</div>
+        <span class="tz-chevron">▼</span>
+      </div>
+      <div class="tz-body">
+        <div class="tz-row">
+          <div class="tz-field-name">Хто погоджує результат</div>
+          <input class="tz-input" id="f_approver" placeholder="Ім'я та посада відповідального за фінальне OK" oninput="save()">
+          <span class="badge req">Обов'язк.</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Кількість раундів правок</div>
+          <select class="tz-select" id="f_rounds" onchange="save()">
+            <option value="">— оберіть —</option>
+            <option>1 раунд</option>
+            <option>2 раунди (стандарт)</option>
+            <option>3+ раунди (потрібне обґрунтування)</option>
+          </select>
+          <span class="badge opt">Бажано</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Бюджет (якщо є)</div>
+          <input class="tz-input" id="f_budget" placeholder="Зовнішній підряд / поліграфія / ліміт або «без бюджету»" oninput="save()">
+          <span class="badge opt">Бажано</span>
+        </div>
+        <div class="tz-row">
+          <div class="tz-field-name">Додаткові коментарі</div>
+          <textarea class="tz-textarea" id="f_comments" placeholder="Будь-які деталі, які не вкладаються у вищезазначені поля" oninput="save()"></textarea>
+          <span class="badge opt">Бажано</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-row">
+      <span class="footer-note">4Service Group · Відділ маркетингу · Регулярне оновлення щомісяця</span>
+      <span class="tag">Marketing Ops</span>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function tog(header) {
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  header.querySelector('.tz-chevron').textContent = isOpen ? '▼' : '▲';
+  header.nextElementSibling.classList.toggle('open', !isOpen);
+}
+
+function toggleCheck(cb) {
+  cb.closest('.check-opt').classList.toggle('selected', cb.checked);
+}
+function toggleRadio(rb) {
+  document.querySelectorAll(`input[name="${rb.name}"]`).forEach(r => {
+    r.closest('.radio-opt').classList.toggle('selected', r.checked);
+  });
+}
+
+function gv(id) { const e = document.getElementById(id); return e ? e.value : ''; }
+function getChecks(groupId) { return [...document.querySelectorAll(`#${groupId} input:checked`)].map(c => c.value); }
+function getRadio(name) { const r = document.querySelector(`input[name="${name}"]:checked`); return r ? r.value : ''; }
+
+function save() {
+  const d = {
+    f_name: gv('f_name'), f_initiator: gv('f_initiator'),
+    f_date_submit: gv('f_date_submit'), f_deadline: gv('f_deadline'),
+    f_type: getChecks('f_type'), priority: getRadio('priority'),
+    f_goal: gv('f_goal'), audience: getRadio('audience'),
+    f_message: gv('f_message'), f_refs: gv('f_refs'),
+    f_format: getChecks('f_format'), f_volume: gv('f_volume'),
+    f_lang: getChecks('f_lang'), brand: getRadio('brand'),
+    f_tone: gv('f_tone'), f_tech: gv('f_tech'),
+    f_texts: gv('f_texts'), f_logos: gv('f_logos'),
+    photos: getRadio('photos'), f_style_refs: gv('f_style_refs'),
+    f_approver: gv('f_approver'), f_rounds: gv('f_rounds'),
+    f_budget: gv('f_budget'), f_comments: gv('f_comments'),
+  };
+  try { localStorage.setItem('tz_4service', JSON.stringify(d)); } catch(e) {}
+}
+
+function loadSaved() {
+  let d;
+  try { d = JSON.parse(localStorage.getItem('tz_4service')); } catch(e) {}
+  if (!d) return;
+  const sv = (id, val) => { const e = document.getElementById(id); if (e && val) e.value = val; };
+  sv('f_name',d.f_name); sv('f_initiator',d.f_initiator);
+  sv('f_date_submit',d.f_date_submit); sv('f_deadline',d.f_deadline);
+  sv('f_goal',d.f_goal); sv('f_message',d.f_message); sv('f_refs',d.f_refs);
+  sv('f_volume',d.f_volume); sv('f_tone',d.f_tone); sv('f_tech',d.f_tech);
+  sv('f_texts',d.f_texts); sv('f_logos',d.f_logos); sv('f_style_refs',d.f_style_refs);
+  sv('f_approver',d.f_approver); sv('f_rounds',d.f_rounds);
+  sv('f_budget',d.f_budget); sv('f_comments',d.f_comments);
+
+  const rc = (gid, vals) => { if (!vals) return; document.querySelectorAll(`#${gid} input`).forEach(cb => { cb.checked = vals.includes(cb.value); cb.closest('.check-opt').classList.toggle('selected', cb.checked); }); };
+  rc('f_type', d.f_type); rc('f_format', d.f_format); rc('f_lang', d.f_lang);
+
+  const rr = (name, val) => { if (!val) return; const r = document.querySelector(`input[name="${name}"][value="${CSS.escape ? val : val}"]`) || [...document.querySelectorAll(`input[name="${name}"]`)].find(x => x.value === val); if (r) { r.checked = true; toggleRadio(r); } };
+  rr('priority', d.priority); rr('audience', d.audience);
+  rr('brand', d.brand); rr('photos', d.photos);
+}
+
+function copyTZ() {
+  const reqFields = ['f_name','f_initiator','f_deadline','f_goal','f_message','f_volume','f_texts','f_approver'];
+  let missing = false;
+  reqFields.forEach(id => {
+    const e = document.getElementById(id);
+    if (e && !e.value.trim()) { e.classList.add('missing'); missing = true; }
+    else if (e) e.classList.remove('missing');
+  });
+  if (!getChecks('f_type').length || !getRadio('priority') || !getRadio('audience')) missing = true;
+  if (missing) { showToast('⚠️ Заповніть всі обов\'язкові поля'); return; }
+
+  const L = (label, val) => val ? `${label}: ${val}\n` : '';
+  const text = [
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n',
+    '   ТЗ НА МАРКЕТИНГОВИЙ ЗАПИТ\n',
+    '   4Service Group — Marketing\n',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n',
+    '📋 ЗАГАЛЬНА ІНФОРМАЦІЯ\n',
+    L('Назва',gv('f_name')), L('Ініціатор',gv('f_initiator')),
+    L('Дата подачі',gv('f_date_submit')), L('Дедлайн',gv('f_deadline')),
+    L('Тип задачі',getChecks('f_type').join(', ')), L('Пріоритет',getRadio('priority')),
+    '\n🎯 ЦІЛЬ ТА АУДИТОРІЯ\n',
+    L('Мета',gv('f_goal')), L('Аудиторія',getRadio('audience')),
+    L('Ключове повідомлення',gv('f_message')), L('Референси',gv('f_refs')),
+    '\n📐 ВИМОГИ ДО МАТЕРІАЛУ\n',
+    L('Формат',getChecks('f_format').join(', ')), L('Обсяг',gv('f_volume')),
+    L('Мова',getChecks('f_lang').join(', ')), L('Брендинг',getRadio('brand')),
+    L('Стиль і тон',gv('f_tone')), L('Технічні обмеження',gv('f_tech')),
+    '\n📁 КОНТЕНТ ТА МАТЕРІАЛИ\n',
+    L('Тексти/тезиси',gv('f_texts')), L('Логотипи',gv('f_logos')),
+    L('Фото',getRadio('photos')), L('Референси стилю',gv('f_style_refs')),
+    '\n✅ ПОГОДЖЕННЯ\n',
+    L('Відповідальний',gv('f_approver')), L('Раунди правок',gv('f_rounds')),
+    L('Бюджет',gv('f_budget')), L('Коментарі',gv('f_comments')),
+  ].join('');
+
+  navigator.clipboard.writeText(text)
+    .then(() => showToast('✅ ТЗ скопійовано! Вставте в Telegram або email'))
+    .catch(() => showToast('❌ Помилка копіювання — спробуйте ще раз'));
+}
+
+function clearForm() {
+  if (!confirm('Очистити всі поля форми?')) return;
+  document.querySelectorAll('.tz-input,.tz-textarea,.tz-select').forEach(e => e.value = '');
+  document.querySelectorAll('input[type=checkbox]').forEach(cb => { cb.checked = false; cb.closest('.check-opt').classList.remove('selected'); });
+  document.querySelectorAll('input[type=radio]').forEach(rb => { rb.checked = false; rb.closest('.radio-opt').classList.remove('selected'); });
+  document.querySelectorAll('.missing').forEach(e => e.classList.remove('missing'));
+  try { localStorage.removeItem('tz_4service'); } catch(e) {}
+  showToast('🗑 Форму очищено');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+window.addEventListener('DOMContentLoaded', loadSaved);
+</script>
+</body>
+</html>
