@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOOD — Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0c0b09;
+    --off-white: #f0ece3;
+    --accent: #d4410f;
+    --smoke: #7a746a;
+    --smoke-light: #a09890;
+    --line: #1e1c18;
+    --card: #121109;
+    --card2: #161410;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--off-white);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ======== HEADER ======== */
+  header {
+    padding: 52px 72px 48px;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: end;
+  }
+
+  .h-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+
+  .h-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 96px);
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+  }
+
+  .h-title span { color: var(--accent); }
+
+  .h-desc {
+    margin-top: 28px;
+    font-size: 14px;
+    color: var(--smoke-light);
+    max-width: 480px;
+    line-height: 1.8;
+  }
+
+  .h-desc strong { color: var(--off-white); font-weight: 600; }
+
+  .h-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--smoke);
+    text-align: right;
+    line-height: 2.2;
+    text-transform: uppercase;
+    align-self: start;
+  }
+
+  /* ======== QUESTION BLOCKS ======== */
+  .q-block {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .q-block-inner {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+  }
+
+  /* left rail */
+  .q-rail {
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 56px;
+    gap: 0;
+  }
+
+  .q-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    user-select: none;
+  }
+
+  .q-line-vert {
+    flex: 1;
+    width: 1px;
+    background: var(--line);
+    margin-top: 16px;
+  }
+
+  /* right content */
+  .q-content {
+    padding: 56px 72px 56px 56px;
+  }
+
+  .q-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    margin-bottom: 14px;
+  }
+
+  .q-main {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    color: var(--off-white);
+    margin-bottom: 28px;
+  }
+
+  .q-main em {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .q-why {
+    font-size: 13px;
+    color: var(--smoke-light);
+    line-height: 1.75;
+    margin-bottom: 36px;
+    max-width: 560px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line);
+  }
+
+  /* sub-questions */
+  .sub-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .sub-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .sub-item {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 18px 20px;
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+
+  .sub-arrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    padding-top: 2px;
+    opacity: 0.6;
+  }
+
+  .sub-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--off-white);
+    line-height: 1.5;
+  }
+
+  .sub-note {
+    font-size: 11px;
+    color: var(--smoke);
+    line-height: 1.6;
+    margin-top: 5px;
+    font-weight: 300;
+  }
+
+  /* listen for */
+  .listen-box {
+    margin-top: 24px;
+    background: #0f0d0b;
+    border: 1px solid #1e1c18;
+    border-left: 3px solid var(--accent);
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .listen-icon {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding-top: 2px;
+    white-space: nowrap;
+  }
+
+  .listen-text {
+    font-size: 12px;
+    color: var(--smoke-light);
+    line-height: 1.7;
+  }
+
+  .listen-text strong {
+    color: var(--off-white);
+    font-weight: 600;
+  }
+
+  /* ======== FOOTER ======== */
+  footer {
+    padding: 28px 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #2a2720;
+    text-transform: uppercase;
+  }
+
+  /* ======== RESPONSIVE ======== */
+  @media (max-width: 860px) {
+    header { padding: 36px 24px; grid-template-columns: 1fr; }
+    .h-meta { text-align: left; }
+    .q-block-inner { grid-template-columns: 40px 1fr; }
+    .q-content { padding: 36px 24px 36px 28px; }
+    .q-rail { padding-top: 40px; }
+    footer { padding: 24px; flex-direction: column; gap: 8px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div>
+    <div class="h-eyebrow">HOOD Coffeeshop — Ambient Campaign — Discovery Brief</div>
+    <h1 class="h-title">5 питань.<br><span>Одна зустріч.</span></h1>
+    <p class="h-desc">
+      Це не анкета і не тест. Це розмова.<br>
+      Ми ставимо <strong>5 питань</strong> — кожне з них відкриває те, що не можна знайти в жодному брифі.<br>
+      Дайте відповіді чесно, навіть якщо вони здаються розмитими. Особливо якщо здаються розмитими.
+    </p>
+  </div>
+  <div class="h-meta">
+    Формат — жива бесіда<br>
+    Тривалість — 60–90 хв<br>
+    Учасники — власники / засновники<br>
+    Версія — 1.0 · 2026
+  </div>
+</header>
+
+
+<!-- Q1 -->
+<div class="q-block">
+  <div class="q-block-inner">
+    <div class="q-rail">
+      <div class="q-num">Питання 01</div>
+      <div class="q-line-vert"></div>
+    </div>
+    <div class="q-content">
+      <div class="q-tag">Ідентичність / Межі</div>
+      <div class="q-main">Що HOOD точно<br><em>ніколи не зробить?</em><br>Що суперечить вашим цінностям?</div>
+      <div class="q-why">
+        Антибриф розповідає про бренд більше, ніж будь-яке «ми хочемо бути...». Коли людина каже «це не про нас» — вона розкриває своє ядро. Нам потрібно знати, де межа, перш ніж пропонувати будь-яку ідею.
+      </div>
+
+      <div class="sub-label">Якщо мовчать — запитайте детальніше</div>
+      <div class="sub-list">
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Уявіть, що конкурент робить якусь активність, і вам фізично неприємно. Що це таке?</div>
+            <div class="sub-note">Реакція огиди — найчесніша відповідь на питання про цінності.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Є формати, які ви особисто ненавидите як споживач? Гівевеї, масові акції, «отримай знижку за фото»?</div>
+            <div class="sub-note">Часто власники мають сильні особисті антипатії — вони і є правильними орієнтирами.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Якщо б ця активність вийшла «не так» і про неї написали в соцмережах — що б вас найбільше засмутило? Що про вас сказали б?</div>
+            <div class="sub-note">«Вони продалися», «занадто намагаються», «це не їхній стиль» — кожна варіація означає різне.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Є теми або асоціації, до яких HOOD ніколи не торкнеться — навіть якщо це «в тренді»?</div>
+            <div class="sub-note">Тренди на гумор, політику, провокацію — деякі заклади мають жорсткі табу, і це абсолютно нормально.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="listen-box">
+        <div class="listen-icon">Слухайте</div>
+        <div class="listen-text">
+          <strong>Що шукати у відповіді:</strong> якщо власник відповідає швидко і впевнено — межі чіткі, бренд зрілий. Якщо вагається — можливо, ідентичність ще формується, і це теж важлива інформація. Зафіксуйте конкретні слова, якими вони описують «не наше» — це буде мова бренду.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Q2 -->
+<div class="q-block">
+  <div class="q-block-inner">
+    <div class="q-rail">
+      <div class="q-num">Питання 02</div>
+      <div class="q-line-vert"></div>
+    </div>
+    <div class="q-content">
+      <div class="q-tag">Референси / Натхнення</div>
+      <div class="q-main">Є заклади або бренди,<br>активність яких<br><em>вас надихнула?</em></div>
+      <div class="q-why">
+        Референс — це найкоротший шлях до смаку людини. Не обов'язково кав'ярні. Будь-який бренд, будь-яка кампанія, будь-який момент, який вони запам'ятали і хотіли б повторити у своєму контексті.
+      </div>
+
+      <div class="sub-label">Якщо мовчать — запитайте детальніше</div>
+      <div class="sub-list">
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Чи бачили ви щось на вулиці, в місті або за кордоном, що змусило зупинитись і сфотографувати?</div>
+            <div class="sub-note">Ambient-реакція «о, круто» — найточніший компас. Це і є те, що вони хочуть створити.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Є кав'ярні або заклади в інших містах або країнах, про які ви думаєте «от би нам так»?</div>
+            <div class="sub-note">Навіть якщо не пам'ятають назву — нехай опишуть відчуття, атмосферу, деталь.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Є рекламна кампанія або активність будь-якого бренду, яку ви досі пам'ятаєте? Що в ній було?</div>
+            <div class="sub-note">«Це було чесно», «це було смішно, але не по-дурному», «це виглядало дорого, але без понтів» — кожна деталь важлива.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Якщо не бренди — то може є художник, музикант, місце або подія, яка передає потрібний вам дух?</div>
+            <div class="sub-note">Іноді найточніший референс — це альбом, фільм або вулиця в іншому місті.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="listen-box">
+        <div class="listen-icon">Слухайте</div>
+        <div class="listen-text">
+          <strong>Що шукати у відповіді:</strong> зверніть увагу не лише на назви, а на те, <em>чому</em> це їх зачепило. «Там не було логотипів», «це виглядало випадково, але було навмисне», «це було тільки для тих, хто розуміє» — ці формулювання дають тональність кампанії.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Q3 -->
+<div class="q-block">
+  <div class="q-block-inner">
+    <div class="q-rail">
+      <div class="q-num">Питання 03</div>
+      <div class="q-line-vert"></div>
+    </div>
+    <div class="q-content">
+      <div class="q-tag">Ресурси / Реальність</div>
+      <div class="q-main">Який бюджет<br>закладений <em>на активність?</em><br>Хоча б діапазон.</div>
+      <div class="q-why">
+        Найкраща ідея — та, яку можна реалізувати. Бюджет визначає не амбіції, а інструменти. Від стікера на стовпі до арт-об'єкту в просторі — між ними прірва у виконанні, але не обов'язково у впливі. Нам потрібна чесна цифра, щоб думати в правильному напрямку.
+      </div>
+
+      <div class="sub-label">Якщо уникають — запитайте детальніше</div>
+      <div class="sub-list">
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Якщо б ідея вас повністю захопила — скільки ви були б готові вкласти, щоб зробити її добре?</div>
+            <div class="sub-note">Питання про «ідеальний сценарій» знімає захисну реакцію і показує реальні можливості.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Є бюджет тільки на виробництво — чи є також на документацію, зйомку, підсилення в соцмережах?</div>
+            <div class="sub-note">Ambient без фіксації — це дерево, що впало в лісі. Контент про активність часто важливіший за саму активність.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Чи є можливість залучити партнерів або спонсорів, щоб розширити бюджет?</div>
+            <div class="sub-note">Колаборація з локальним художником, сусіднім закладом або брендом може подвоїти ресурс і додати ще один шар історії.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="listen-box">
+        <div class="listen-icon">Слухайте</div>
+        <div class="listen-text">
+          <strong>Що шукати у відповіді:</strong> якщо власник каже «від 500 до 2000 USD» і при цьому хоче «щось як у Nike» — це момент, щоб м'яко відкалібрувати очікування. Якщо каже «бюджет є, головне — ідея» — запитайте конкретніше. <strong>Розмита цифра веде до розмитого результату.</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Q4 -->
+<div class="q-block">
+  <div class="q-block-inner">
+    <div class="q-rail">
+      <div class="q-num">Питання 04</div>
+      <div class="q-line-vert"></div>
+    </div>
+    <div class="q-content">
+      <div class="q-tag">Масштаб / Горизонт</div>
+      <div class="q-main">Це разова акція —<br>чи ви готові<br><em>до серії?</em></div>
+      <div class="q-why">
+        Деякі найкращі ambient-кампанії — це не удар, а система. Серія пов'язаних моментів, які будують очікування і розповідають одну історію частинами. Але це вимагає іншого рівня committment — по часу, ресурсах і терпінні.
+      </div>
+
+      <div class="sub-label">Якщо не думали про це — розкрийте питання</div>
+      <div class="sub-list">
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Який горизонт планування ви бачите: один місяць, сезон, рік?</div>
+            <div class="sub-note">Різні горизонти вимагають різних стратегій. За місяць — один сильний удар. За рік — можна будувати характер.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Чи є у вас важливі дати, події або сезони, до яких активність має бути прив'язана?</div>
+            <div class="sub-note">Відкриття нового простору, річниця, літній сезон, фестиваль у районі — це природні точки для запуску.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Якщо перший «епізод» кампанії спрацює — ви готові продовжувати? Або це буде одна спроба і далі видно?</div>
+            <div class="sub-note">Чесна відповідь тут важливіша за амбітну. Краще зробити одне добре, ніж три погано.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Хто всередині команди буде власником цього проєкту — і скільки часу він може на це виділяти?</div>
+            <div class="sub-note">Ambient без відповідального всередині бренду зазвичай помирає після першого ентузіазму.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="listen-box">
+        <div class="listen-icon">Слухайте</div>
+        <div class="listen-text">
+          <strong>Що шукати у відповіді:</strong> якщо кажуть «хочемо серію», але бюджет обмежений і команди немає — це привід говорити про один якісний момент замість трьох середніх. <strong>Краще бути легендою один раз, ніж бути «тим місцем, яке щось намагалось» весь сезон.</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Q5 -->
+<div class="q-block" style="border-bottom: none;">
+  <div class="q-block-inner">
+    <div class="q-rail">
+      <div class="q-num">Питання 05</div>
+      <div class="q-line-vert"></div>
+    </div>
+    <div class="q-content">
+      <div class="q-tag">Обмеження / Тверді «Ні»</div>
+      <div class="q-main">Є щось, чого ви<br>точно <em>не хочете</em> —<br>тема, формат, асоціація?</div>
+      <div class="q-why">
+        Будь-яке обмеження є цінним. «Нічого занадто голосного», «не хочемо виглядати дешево», «без занадто очевидного брендингу» — кожна з цих фраз відразу звужує поле і знімає цілі класи поганих ідей. Обмеження — це не перешкода, це архітектура майбутньої концепції.
+      </div>
+
+      <div class="sub-label">Якщо кажуть «нічого особливого» — копайте глибше</div>
+      <div class="sub-list">
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Є формати, які відчуваються як «занадто агресивні» або «занадто очевидні» для HOOD?</div>
+            <div class="sub-note">Флаєри, промоутери, гучні інсталяції, QR-коди на кожному кроці, нав'язлива символіка бренду — деякі власники фізично не переносять певні форми.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Є аудиторія, якій ви не хочете надавати сигнал — навіть ненавмисно?</div>
+            <div class="sub-note">«Ми не хочемо стати місцем для шумних туристів», «ми не хочемо втратити поточних гостей заради нових» — це законні обмеження.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Є теми — соціальні, політичні, культурні — яких HOOD хоче уникати?</div>
+            <div class="sub-note">Не тому що бояться, а тому що «це не про нас». Дуже важлива різниця.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Є сусіди, орендодавці або локальний контекст, який обмежує те, що можна зробити у просторі чи поруч?</div>
+            <div class="sub-note">Практичне питання — але воно рятує від ідей, які неможливо реалізувати.</div>
+          </div>
+        </div>
+        <div class="sub-item">
+          <span class="sub-arrow">→</span>
+          <div>
+            <div class="sub-text">Якщо ідея виявиться занадто нішевою і її зрозуміє лише 10% людей — вас це влаштує? Або потрібен масовий резонанс?</div>
+            <div class="sub-note">«Краще 1000 своїх, ніж 100 000 випадкових» — або навпаки. Це питання про пріоритет глибини vs охоплення.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="listen-box">
+        <div class="listen-icon">Слухайте</div>
+        <div class="listen-text">
+          <strong>Що шукати у відповіді:</strong> чим більше «ні» — тим краще ви розумієте бренд. Не намагайтесь переконати їх послабити обмеження. Замість цього — зафіксуйте кожне і поверніться до нього після зустрічі. <strong>Правильна ідея для HOOD — та, яка не порушує жодного з цих «ні».</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<footer>
+  <p>HOOD Coffeeshop — Discovery Brief — 2026</p>
+  <p>5 питань · Версія 1.0</p>
+</footer>
+
+</body>
+</html>
