@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balbek — Case Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #ffffff;
+  --ink: #0f0f0f;
+  --mid: #888;
+  --faint: #e8e8e8;
+  --xfaint: #f4f4f4;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Mono', monospace;
+  font-weight: 300;
+  font-size: 12px;
+}
+
+/* ── LAYOUT ── */
+.page { display: grid; grid-template-columns: 48px 1fr; min-height: 100vh; }
+
+/* ── FUNNEL STRIP ── */
+.funnel {
+  border-right: 1px solid var(--faint);
+  position: sticky; top: 0; height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 0; gap: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+.f-label {
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-size: 8px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 20px;
+}
+.f-spine {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: space-around;
+  width: 100%; position: relative;
+}
+.f-spine::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 1px; background: var(--faint); transform: translateX(-50%);
+}
+.f-step {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.f-pct { font-size: 9px; color: var(--mid); transition: color .2s; }
+.f-bar { width: 28px; height: 2px; background: var(--faint); position: relative; }
+.f-fill { position: absolute; left:0; top:0; height:100%; background: var(--ink); transition: width .3s; }
+.f-dot { width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--faint); background: var(--bg); transition: all .2s; }
+.f-step.active .f-dot { background: var(--ink); border-color: var(--ink); }
+.f-step.active .f-pct { color: var(--ink); }
+.f-step.active .f-fill { background: var(--ink); }
+.f-fold {
+  position: relative; z-index: 2; width: 100%;
+  border-top: 1px dashed #bbb; border-bottom: 1px dashed #bbb;
+  padding: 5px 0; display: flex; align-items: center; justify-content: center;
+  margin: 2px 0;
+}
+.f-fold span {
+  font-size: 7px; letter-spacing: .12em; color: #bbb;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+}
+
+/* ── CONTENT ── */
+.content { display: flex; flex-direction: column; }
+
+/* ── BLOCK ── */
+.block {
+  border-bottom: 1px solid var(--faint);
+  padding: 56px 64px;
+  position: relative; transition: background .15s;
+}
+.block:hover { background: var(--xfaint); }
+
+.block-head {
+  display: flex; align-items: baseline; gap: 20px; margin-bottom: 28px;
+}
+.b-num { font-size: 10px; color: var(--mid); width: 22px; flex-shrink: 0; }
+.b-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 300; line-height: 1.1;
+}
+.b-title em { font-style: italic; color: var(--mid); }
+.b-reach {
+  margin-left: auto; font-size: 13px; color: var(--ink);
+  flex-shrink: 0; font-weight: 400;
+}
+.b-reach-label { font-size: 9px; color: var(--mid); margin-left: 4px; }
+
+/* DESC */
+.b-desc {
+  font-size: 12px; line-height: 1.85; color: var(--mid);
+  margin-left: 42px; margin-bottom: 28px; max-width: 640px;
+}
+.b-desc strong { color: var(--ink); font-weight: 400; }
+
+/* SPEC TABLE */
+.spec {
+  margin-left: 42px;
+  border-top: 1px solid var(--faint);
+  border-left: 1px solid var(--faint);
+}
+.spec-row { display: grid; grid-template-columns: 160px 1fr; }
+.spec-k {
+  padding: 10px 16px; font-size: 9px; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--mid);
+  border-right: 1px solid var(--faint); border-bottom: 1px solid var(--faint);
+  background: var(--xfaint); display: flex; align-items: center;
+}
+.spec-v {
+  padding: 10px 16px; font-size: 11px; color: var(--ink);
+  border-bottom: 1px solid var(--faint); line-height: 1.6;
+}
+.spec-v code {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  background: var(--faint); padding: 1px 5px;
+}
+.spec-v.note { color: var(--mid); font-style: italic; }
+
+/* SKETCH */
+.sketch {
+  margin-left: 42px; margin-top: 20px;
+  display: flex; gap: 2px; height: 52px;
+}
+.sk {
+  border: 1px solid var(--faint); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 9px; color: var(--mid); text-align: center;
+  background: var(--xfaint); transition: background .15s; letter-spacing: .04em;
+}
+.sk:hover { background: var(--faint); }
+.sk.dark { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sk.border-dark { border-color: var(--ink); color: var(--ink); background: var(--bg); }
+
+/* CAROUSEL INDICATOR */
+.carousel-note {
+  margin-left: 42px; margin-top: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.c-dots { display: flex; gap: 4px; }
+.c-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); }
+.c-dot.empty { background: var(--bg); border: 1px solid var(--faint); }
+.c-text { font-size: 10px; color: var(--mid); }
+
+/* ARCHITECT TOPICS */
+.arch-topics { margin-left: 42px; margin-top: 20px; display: flex; flex-direction: column; gap: 2px; }
+.arch-topic {
+  display: grid; grid-template-columns: 200px 1fr;
+  border: 1px solid var(--faint); border-bottom: none;
+}
+.arch-topics .arch-topic:last-child { border-bottom: 1px solid var(--faint); }
+.at-label {
+  padding: 12px 16px; font-size: 9px; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--ink); font-weight: 400;
+  border-right: 1px solid var(--faint); background: var(--xfaint);
+  display: flex; align-items: flex-start;
+}
+.at-body { padding: 12px 16px; font-size: 11px; color: var(--mid); line-height: 1.65; }
+.at-body em { color: var(--ink); font-style: italic; font-family: 'Playfair Display', serif; font-size: 13px; }
+
+/* FOLD DIVIDER */
+.fold-div {
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 64px; height: 34px;
+  border-top: 1px dashed #bbb; border-bottom: 1px dashed #bbb;
+}
+.fold-text { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: #bbb; white-space: nowrap; }
+.fold-hr { flex: 1; height: 1px; background: #e0e0e0; }
+
+/* NOTE BOX */
+.note-box {
+  margin-left: 42px; margin-top: 16px;
+  border-left: 2px solid var(--ink); padding: 10px 14px;
+  font-size: 11px; color: var(--mid); line-height: 1.7; font-style: italic;
+}
+.note-box strong { color: var(--ink); font-style: normal; font-weight: 400; }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--faint); padding: 20px 64px 20px 112px;
+  display: flex; justify-content: space-between;
+  font-size: 9px; color: var(--mid); letter-spacing: .12em;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- FUNNEL -->
+  <div class="funnel">
+    <div class="f-label">Scroll depth</div>
+    <div class="f-spine">
+
+      <div class="f-step active" data-b="b1">
+        <div class="f-pct">100%</div>
+        <div class="f-bar"><div class="f-fill" style="width:100%"></div></div>
+        <div class="f-dot"></div>
+      </div>
+
+      <div class="f-fold"><span>fold</span></div>
+
+      <div class="f-step" data-b="b2">
+        <div class="f-pct">62%</div>
+        <div class="f-bar"><div class="f-fill" style="width:62%"></div></div>
+        <div class="f-dot"></div>
+      </div>
+
+      <div class="f-step" data-b="b3">
+        <div class="f-pct">42%</div>
+        <div class="f-bar"><div class="f-fill" style="width:42%"></div></div>
+        <div class="f-dot"></div>
+      </div>
+
+      <div class="f-step" data-b="b4">
+        <div class="f-pct">35%</div>
+        <div class="f-bar"><div class="f-fill" style="width:35%"></div></div>
+        <div class="f-dot"></div>
+      </div>
+
+      <div class="f-step" data-b="b5">
+        <div class="f-pct">22%</div>
+        <div class="f-bar"><div class="f-fill" style="width:22%"></div></div>
+        <div class="f-dot"></div>
+      </div>
+
+      <div class="f-step" data-b="b6">
+        <div class="f-pct">15%</div>
+        <div class="f-bar"><div class="f-fill" style="width:15%"></div></div>
+        <div class="f-dot"></div>
+      </div>
+
+      <div class="f-step" data-b="b7">
+        <div class="f-pct">10%</div>
+        <div class="f-bar"><div class="f-fill" style="width:10%"></div></div>
+        <div class="f-dot"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- 01 ROOM TOUR -->
+    <div class="block" id="b1">
+      <div class="block-head">
+        <span class="b-num">01</span>
+        <span class="b-title">Room Tour — <em>перший екран</em></span>
+        <span class="b-reach">100%<span class="b-reach-label">відвідувачів</span></span>
+      </div>
+      <div class="b-desc">
+        Відео на повний екран запускається першим. Назва проекту, тип, місто, рік — поверх відео. <strong>Одна кнопка: play.</strong> Хто не піде далі — вже отримав суть і відчув атмосферу.
+      </div>
+      <div class="spec">
+        <div class="spec-row">
+          <div class="spec-k">Відео</div>
+          <div class="spec-v">Room tour · 3–5 хв · зі звуком · запускається за кліком</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-k">Метадані поверх</div>
+          <div class="spec-v">Назва · Тип · Місто · Рік · Площа m²</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-k">Фолбек</div>
+          <div class="spec-v note">Якщо відео ще не готове — повноекранне фото з тим самим оверлеєм. Структура не ламається.</div>
+        </div>
+      </div>
+      <div class="sketch">
+        <div class="sk dark" style="flex:1; height:100%; font-size:10px">▶ ROOM TOUR · назва · метадані · повний екран</div>
+      </div>
+    </div>
+
+    <!-- FOLD -->
+    <div class="fold-div">
+      <div class="fold-hr"></div>
+      <div class="fold-text">above the fold · нижче бачать ~62% відвідувачів</div>
+      <div class="fold-hr"></div>
+    </div>
+
+    <!-- 02 CONCEPT -->
+    <div class="block" id="b2">
+      <div class="block-head">
+        <span class="b-num">02</span>
+        <span class="b-title">Концепція + <em>цифри</em></span>
+        <span class="b-reach">62%<span class="b-reach-label">відвідувачів</span></span>
+      </div>
+      <div class="b-desc">
+        Максимум 150 слів — читається за 45 секунд. <strong>Ліворуч</strong> — головна ідея і виклик. <strong>Праворуч</strong> — 4 цифри. Найважливіша — результат клієнта після відкриття.
+      </div>
+      <div class="spec">
+        <div class="spec-row">
+          <div class="spec-k">Текст</div>
+          <div class="spec-v">≤ 150 слів. Структура: <code>ідея</code> → <code>виклик</code> → <code>рішення</code>. Конкретно, без кліше.</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-k">Метрики</div>
+          <div class="spec-v">Площа m² · Тривалість проекту · Нагороди · <code>Результат клієнта +N%</code></div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-k">Тон</div>
+          <div class="spec-v note">«Ми зробили X тому що Y» — а не «простір натхненний природою».</div>
+        </div>
+      </div>
+      <div class="sketch">
+        <div class="sk" style="flex:2">Текст ідеї · ≤150 слів</div>
+        <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; gap:2px">
+          <div class="sk" style="height:100%">m²</div>
+          <div class="sk" style="height:100%">міс</div>
+          <div class="sk border-dark" style="height:100%">+N%</div>
+          <div class="sk" style="height:100%">★</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 GALLERY -->
+    <div class="block" id="b3">
+      <div class="block-head">
+        <span class="b-num">03</span>
+        <span class="b-title">Галерея — <em>фотографії</em></span>
+        <span class="b-reach">42%<span class="b-reach-label">відвідувачів</span></span>
+      </div>
+      <div class="b-desc">
+        Асиметрична сітка. Може бути <strong>кілька каруселей</strong> — окремо для різних зон або типів знімків. Одне фото з людьми в просторі — обов'язково. Клік → lightbox.
+      </div>
+      <div class="spec">
+        <div class="spec-row">
+          <div class="spec-k">Карусель 1</div>
+          <div class="spec-v"><code>Загальні плани</code> — hero shots, зони, масштаб · 4–6 фото</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-k">Карусель 2</div>
+          <div class="spec-v"><code>Деталі та матеріали</code> — фактури, вузли, освітлення · 4–8 фото</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-k">Карусель 3 (опц.)</div>
+          <div class="spec-v"><code>Атмосфера</code> — вечірні знімки, люди в просторі · 3–5 фото</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-k">People in space</div>
+          <div class="spec-v note">Обов'язково в одній з каруселей. Дає масштаб і робить простір живим.</div>
+        </div>
+      </div>
+      <div class="sketch">
+        <div class="sk" style="flex:3; height:100%">Карусель 1 · загальні</div>
+        <div style="flex:1; display:flex; flex-direction:column; gap:2px">
+          <div class="sk" style="flex:1; font-size:8px">Кар. 2<br>деталі</div>
+          <div class="sk border-dark" style="flex:1; font-size:8px">Кар. 3<br>атмосф.</div>
+        </div>
+      </div>
+      <div class="carousel-note">
+        <div class="c-dots">
+          <div class="c-dot"></div>
+          <div class="c-dot empty"></div>
+          <div class="c-dot empty"></div>
+          <div class="c-dot empty"></div>
+        </div>
+        <div class="c-text">← → навігація каруселі · кожна незалежна</div>
+      </div>
+    </div>
+
+    <!-- 04 CLIENT -->
+    <div class="block" id="b4">
+      <div class="block-head">
+        <span class="b-num">04</span>
+        <span class="b-title">Клієнт говорить — <em>відео + цитата</em></span>
+        <span class="b-reach">35%<span class="b-reach-label">відвідувачів</span></span>
+      </div>
+      <div class="b-desc">
+        <strong>Хто дійшов сюди — потенційний замовник.</strong> Відео-інтерв'ю зліва, одна сильна цитата справа. Клієнт відповідає на три питання: виклик → чому Balbek → результат після відкриття.
+      </div>
+      <div class="spec">
+        <div class="spec-row">
+          <div class="spec-k">Три питання</div>
+          <div class="spec-v"><code>1.</code> Яка була задача? <code>2.</code> Чому обрали Balbek? <code>3.</code> Що змінилось після відкриття?</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-k">Цитата</div>
+          <div class="spec-v">Одне речення — найсильніше і конкретне. Ім'я, посада, компанія.</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-k">Хронометраж</div>
+          <div class="spec-v">3–5 хв</div>
+        </div>
+      </div>
+      <div class="sketch">
+        <div class="sk border-dark" style="flex:1">▶ Відео-інтерв'ю · 3–5 хв</div>
+        <div class="sk" style="flex:1">" Цитата · Ім'я · Посада "</div>
+      </div>
+    </div>
+
+    <!-- 05 ARCHITECT -->
+    <div class="block" id="b5">
+      <div class="block-head">
+        <span class="b-num">05</span>
+        <span class="b-title">Архітектор — <em>голос бюро</em></span>
+        <span class="b-reach">22%<span class="b-reach-label">відвідувачів</span></span>
+      </div>
+      <div class="b-desc">
+        Людяність Balbek Bureau. Архітектор від першої особи пояснює рішення — текст у форматі трьох тез або коротке відео-walkthrough. Кожна теза відповідає на конкретне питання.
+      </div>
+      <div class="arch-topics">
+        <div class="arch-topic">
+          <div class="at-label">Виклик</div>
+          <div class="at-body">Що було найскладнішим у цьому проекті? Одне конкретне обмеження — бюджет, планування, технічне рішення — яке визначило весь проект. <em>«Ми не могли зробити X, тому вигадали Y.»</em></div>
+        </div>
+        <div class="arch-topic">
+          <div class="at-label">Ключове рішення</div>
+          <div class="at-body">Яке архітектурне або дизайнерське рішення найбільш характеризує цей проект? Що в цьому просторі унікальне — матеріал, планування, деталь, яку ніколи раніше не робили. <em>«Ми вибрали X тому що Y — і це зробило простір таким.»</em></div>
+        </div>
+        <div class="arch-topic">
+          <div class="at-label">Діалог з клієнтом</div>
+          <div class="at-body">Як змінювалась ідея в процесі? Що клієнт спочатку хотів і що вийшло в результаті спільної роботи. Показує що бюро слухає, а не нав'язує. <em>«Клієнт попросив X, але ми запропонували Y — і він погодився коли побачив результат.»</em></div>
+        </div>
+        <div class="arch-topic">
+          <div class="at-label">Матеріали</div>
+          <div class="at-body">Чому обрали саме ці матеріали? Не «це красиво», а конкретна причина — довговічність, тактильність, відповідність бренду клієнта, місцеве виробництво. <em>«Цей камінь ми знайшли на кар'єрі під Києвом — і він дав простору те відчуття землі яке нам було потрібно.»</em></div>
+        </div>
+        <div class="arch-topic">
+          <div class="at-label">Що залишилось у пам'яті</div>
+          <div class="at-body">Одне особисте речення — момент, деталь або реакція яка запам'яталась найбільше. Не корпоративне, людське. Робить кейс живим. <em>«Коли клієнт зайшов вперше і просто мовчав хвилину — ми зрозуміли що все вийшло.»</em></div>
+        </div>
+      </div>
+      <div class="note-box">
+        <strong>Відео-формат (опційно):</strong> архітектор веде камеру по просторі і говорить без скрипту — 2–3 хв. Не постановочне, не студійне. Найсильніший варіант якщо є ресурс.
+      </div>
+    </div>
+
+    <!-- 06 NEXT -->
+    <div class="block" id="b6">
+      <div class="block-head">
+        <span class="b-num">06</span>
+        <span class="b-title">Наступний кейс + <em>CTA</em></span>
+        <span class="b-reach">15%<span class="b-reach-label">відвідувачів</span></span>
+      </div>
+      <div class="b-desc">
+        <strong>Хто дійшов — найгарячіший потенційний клієнт.</strong> Перехід на наступний проект зменшує bounce rate. CTA «Обговорити проект» — тут і тільки тут.
+      </div>
+      <div class="spec">
+        <div class="spec-row">
+          <div class="spec-k">Наступний кейс</div>
+          <div class="spec-v">Назва + тип + фото. Схожа категорія проекту.</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-k">CTA</div>
+          <div class="spec-v"><code>Обговорити проект →</code> — більше ніде по сторінці не продавати.</div>
+        </div>
+      </div>
+      <div class="sketch">
+        <div class="sk" style="flex:2">→ Назва наступного проекту</div>
+        <div class="sk dark" style="flex:1">Обговорити проект →</div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /page -->
+
+<footer>
+  <span>Balbek Bureau · Case Study Template · balbek.com</span>
+  <span>v6.0 · 2025</span>
+</footer>
+
+<script>
+const blocks = document.querySelectorAll('.block[id]');
+const steps = {};
+document.querySelectorAll('.f-step[data-b]').forEach(el => { steps[el.dataset.b] = el; });
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      Object.values(steps).forEach(s => s.classList.remove('active'));
+      const s = steps[e.target.id];
+      if (s) s.classList.add('active');
+    }
+  });
+}, { threshold: 0.4 });
+blocks.forEach(b => obs.observe(b));
+</script>
+</body>
+</html>
