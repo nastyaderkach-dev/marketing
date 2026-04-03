@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shelters — Initiative by RE:Ukraine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+  :root {
+    --orange: #E8720C;
+    --orange-light: #F5A84A;
+    --dark: #0D0E0F;
+    --dark-2: #161718;
+    --dark-3: #1E2022;
+    --mid: #2C2F32;
+    --text-muted: #7A7E82;
+    --text-dim: #B0B4B8;
+    --white: #FFFFFF;
+    --off-white: #F2F0EC;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(13,14,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+
+  .logo-text span {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 11px;
+    display: block;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: -2px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--orange);
+    color: var(--white) !important;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-weight: 500 !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--orange-light) !important; color: var(--dark) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232,114,12,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,114,12,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(232,114,12,0.12);
+    border: 1px solid rgba(232,114,12,0.25);
+    color: var(--orange-light);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(44px, 5.5vw, 80px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+
+  .hero-title .accent { color: var(--orange); }
+
+  .hero-title .outline {
+    -webkit-text-stroke: 2px var(--white);
+    color: transparent;
+  }
+
+  .hero-desc {
+    font-size: 17px;
+    color: var(--text-dim);
+    line-height: 1.65;
+    max-width: 480px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--orange);
+    color: var(--white);
+    padding: 14px 28px;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: var(--orange-light);
+    color: var(--dark);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary svg { width: 16px; height: 16px; }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-dim);
+    padding: 14px 0;
+    font-size: 14px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-ghost:hover { color: var(--white); border-color: var(--orange); }
+
+  .hero-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+  }
+
+  .stats-panel {
+    background: var(--dark-3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .stat-item { }
+
+  .stat-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--orange);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+  }
+
+  .assistant-preview {
+    background: var(--dark-2);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .ap-header {
+    background: var(--mid);
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .ap-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  .ap-title {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .ap-body { padding: 20px 18px; }
+
+  .ap-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .ap-step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(232,114,12,0.15);
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .ap-step-text { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+
+  .ap-select {
+    background: var(--mid);
+    border: 1px solid rgba(232,114,12,0.3);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--orange-light);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* PROBLEM SECTION */
+  section { padding: 100px 48px; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--orange);
+  }
+
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(28px, 3.5vw, 48px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .section-desc {
+    font-size: 17px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-weight: 300;
+    max-width: 640px;
+  }
+
+  /* PROBLEM */
+  .problem-section {
+    background: var(--dark-2);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .problem-cards {
+    display: grid;
+    gap: 16px;
+  }
+
+  .problem-card {
+    background: var(--dark-3);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: border-color 0.3s;
+  }
+
+  .problem-card:hover { border-color: rgba(232,114,12,0.3); }
+
+  .problem-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background: rgba(232,114,12,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  .problem-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: 0.01em;
+  }
+
+  .problem-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  /* HOW IT WORKS */
+  .how-section { max-width: 1200px; margin: 0 auto; }
+
+  .steps-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 64px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .step-card {
+    background: var(--dark-2);
+    padding: 40px 36px;
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .step-card:hover { background: var(--dark-3); }
+
+  .step-card:not(:last-child) {
+    border-right: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .step-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 72px;
+    font-weight: 800;
+    line-height: 1;
+    color: rgba(255,255,255,0.04);
+    position: absolute;
+    top: 24px;
+    right: 28px;
+  }
+
+  .step-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: rgba(232,114,12,0.1);
+    border: 1px solid rgba(232,114,12,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+
+  .step-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .step-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  .step-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .tag {
+    font-size: 11px;
+    background: rgba(232,114,12,0.08);
+    color: var(--orange-light);
+    border: 1px solid rgba(232,114,12,0.15);
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+  }
+
+  /* AUDIENCE */
+  .audience-section {
+    background: var(--dark-2);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .audience-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 56px;
+  }
+
+  .audience-card {
+    background: var(--dark-3);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 36px 32px;
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .audience-card:hover {
+    border-color: rgba(232,114,12,0.35);
+    transform: translateY(-4px);
+  }
+
+  .aud-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .audience-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .audience-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  .aud-examples {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .aud-examples strong {
+    display: block;
+    color: var(--orange);
+    margin-bottom: 4px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* IMPACT */
+  .impact-section {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .impact-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 64px;
+  }
+
+  .impact-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .metric-card {
+    background: var(--dark-2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 28px 24px;
+  }
+
+  .metric-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--orange);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .metric-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .impact-text { }
+
+  .impact-text .section-title { margin-bottom: 20px; }
+
+  .impact-text p {
+    font-size: 16px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+
+  .compare-table {
+    margin-top: 36px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .compare-row:last-child { border-bottom: none; }
+
+  .compare-cell {
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    border-right: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .compare-cell:last-child { border-right: none; }
+
+  .compare-row.header .compare-cell {
+    background: var(--dark-3);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+  }
+
+  .compare-row.header .compare-cell:first-child { color: var(--text-muted); }
+  .compare-row.header .compare-cell.ours { color: var(--orange); background: rgba(232,114,12,0.07); }
+
+  .compare-cell.ours {
+    background: rgba(232,114,12,0.04);
+    color: var(--orange-light);
+    font-weight: 500;
+  }
+
+  .check { color: var(--orange); }
+  .cross { color: var(--text-muted); opacity: 0.4; }
+
+  /* PARTNERS */
+  .partners-section {
+    background: var(--dark-2);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .partners-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .partners-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 48px;
+  }
+
+  .partner-card {
+    background: var(--dark-3);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 18px 20px;
+    transition: border-color 0.2s;
+  }
+
+  .partner-card:hover { border-color: rgba(232,114,12,0.25); }
+
+  .partner-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .partner-card p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 120px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(232,114,12,0.08) 0%, transparent 70%);
+  }
+
+  .cta-section .section-label { justify-content: center; }
+  .cta-section .section-label::before { display: none; }
+
+  .cta-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(36px, 5vw, 68px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    max-width: 700px;
+    margin: 0 auto 24px;
+  }
+
+  .cta-desc {
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    font-weight: 300;
+    line-height: 1.65;
+  }
+
+  .cta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--white);
+    padding: 14px 28px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.2);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark-2);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 48px 48px 32px;
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .footer-brand {}
+
+  .footer-brand .logo-text { font-size: 16px; margin-bottom: 8px; }
+
+  .footer-tagline {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 220px;
+    margin-top: 10px;
+  }
+
+  .footer-col h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .footer-col a {
+    display: block;
+    font-size: 13px;
+    color: var(--text-dim);
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: var(--orange); }
+
+  .footer-bottom {
+    grid-column: 1 / -1;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ap-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .ap-progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+  }
+
+  .ap-progress-fill {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .ap-progress-text {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .ap-step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+
+  .ap-step-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .ap-step-num.done { background: rgba(39,200,64,0.15); border: 1px solid #27C840; color: #27C840; }
+  .ap-step-num.active { background: rgba(232,114,12,0.15); border: 1px solid var(--orange); color: var(--orange); }
+  .ap-step-num.pending { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); }
+
+  .ap-step-text { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .ap-step-text.done-text { font-size: 12px; color: var(--text-muted); }
+  .ap-step-text.done-text strong { color: var(--white); }
+  .ap-step-text.muted { color: var(--text-muted); }
+
+  .ap-step-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .ap-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+
+  .ap-chip {
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .ap-chip.selected {
+    border-color: var(--orange);
+    background: rgba(232,114,12,0.1);
+    color: var(--orange-light);
+    font-weight: 500;
+  }
+
+  .ap-checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  .ap-checkbox {
+    width: 16px; height: 16px;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.2);
+    flex-shrink: 0;
+  }
+
+  .ap-checkbox.checked {
+    background: var(--orange);
+    border-color: var(--orange);
+    position: relative;
+  }
+
+  .ap-checkbox.checked::after {
+    content: '✓';
+    color: white;
+    font-size: 10px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .ap-footer-bar {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .ap-hint { font-size: 11px; color: var(--text-muted); font-style: italic; }
+
+  .ap-btn {
+    background: var(--orange);
+    color: white;
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* DEVELOPER SECTION */
+  .dev-section {
+    background: linear-gradient(135deg, #0D0E0F 0%, #1a1208 50%, #0D0E0F 100%);
+    border-top: 1px solid rgba(232,114,12,0.15);
+    border-bottom: 1px solid rgba(232,114,12,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dev-section::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(232,114,12,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .dev-inner { max-width: 1200px; margin: 0 auto; position: relative; }
+
+  .dev-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    margin-bottom: 64px;
+  }
+
+  .dev-title-block {}
+
+  .dev-pitch {
+    padding-top: 12px;
+  }
+
+  .dev-pitch-text {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.4;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .dev-pitch-text em {
+    color: var(--orange);
+    font-style: normal;
+  }
+
+  .dev-pitch p {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+
+  .dev-tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .dev-tier {
+    background: var(--dark-3);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 28px 24px;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .dev-tier.featured {
+    border-color: rgba(232,114,12,0.4);
+    background: rgba(232,114,12,0.04);
+  }
+
+  .dev-tier.featured::before {
+    content: 'Популярний';
+    position: absolute;
+    top: -11px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--orange);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .dev-tier:hover {
+    border-color: rgba(232,114,12,0.3);
+    transform: translateY(-3px);
+  }
+
+  .dev-tier-name {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+
+  .dev-tier-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .dev-tier-price {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+  }
+
+  .dev-tier-price-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .dev-tier-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .dev-tier-items li {
+    font-size: 12px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+  }
+
+  .dev-tier-items li::before {
+    content: '→';
+    color: var(--orange);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .dev-advantages {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding-top: 48px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .dev-adv {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .dev-adv-icon { font-size: 24px; }
+
+  .dev-adv h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .dev-adv p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  @media (max-width: 900px) {
+    .dev-header { grid-template-columns: 1fr; gap: 36px; }
+    .dev-tiers { grid-template-columns: 1fr; }
+    .dev-advantages { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 48px; }
+    section { padding: 72px 24px; }
+    .problem-grid { grid-template-columns: 1fr; gap: 48px; }
+    .steps-container { grid-template-columns: 1fr; }
+    .step-card:not(:last-child) { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .audience-grid { grid-template-columns: 1fr; }
+    .impact-row { grid-template-columns: 1fr; gap: 48px; }
+    .partners-grid { grid-template-columns: 1fr 1fr; }
+    footer { grid-template-columns: 1fr 1fr; }
+    .footer-brand { grid-column: 1 / -1; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-text">
+      Shelters
+      <span>Initiative by RE:Ukraine</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">Про проєкт</a></li>
+    <li><a href="#how">Як працює</a></li>
+    <li><a href="#audience">Для кого</a></li>
+    <li><a href="#developer">Девелоперам</a></li>
+    <li><a href="#partners">Партнери</a></li>
+    <li><a href="#assistant" class="nav-cta">Відкрити Assistant →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">RE:Ukraine Shelters — Березень 2026</div>
+    <h1 class="hero-title">
+      Система укриттів,<br>
+      <span class="accent">доступна</span><br>
+      <span class="outline">кожному.</span>
+    </h1>
+    <p class="hero-desc">
+      Цифровий посібник і ШІ-помічник для тих, хто проєктує, облаштовує та приймає рішення щодо укриттів цивільного захисту в Україні.
+    </p>
+    <div class="hero-actions">
+      <a href="#assistant" class="btn-primary">
+        Спробувати Shelters Assistant
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#about" class="btn-ghost">Дізнатись більше ↓</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stats-panel">
+      <div class="stat-item">
+        <div class="stat-num">12</div>
+        <div class="stat-label">типових<br>архітектурних проєктів</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-label">категорії<br>укриттів</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5</div>
+        <div class="stat-label">країн<br>міжнародного досвіду</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">об'єктів<br>із рекомендаціями</div>
+      </div>
+    </div>
+
+    <div class="assistant-preview" id="assistant">
+      <div class="ap-header">
+        <div class="ap-dot" style="background:#FF5F5B"></div>
+        <div class="ap-dot" style="background:#FEBC2E"></div>
+        <div class="ap-dot" style="background:#27C840"></div>
+        <div class="ap-title">Shelters Assistant — підбір рішень</div>
+      </div>
+      <div class="ap-progress">
+        <div class="ap-progress-bar">
+          <div class="ap-progress-fill" style="width:60%"></div>
+        </div>
+        <span class="ap-progress-text">Крок 3 з 5</span>
+      </div>
+      <div class="ap-body">
+        <div class="ap-step ap-done">
+          <div class="ap-step-num done">✓</div>
+          <div>
+            <div class="ap-step-text done-text">Тип об'єкта: <strong>Школа / освітній заклад</strong></div>
+          </div>
+        </div>
+        <div class="ap-step ap-done">
+          <div class="ap-step-num done">✓</div>
+          <div>
+            <div class="ap-step-text done-text">Статус: <strong>Існуюча будівля, є підвал</strong></div>
+          </div>
+        </div>
+        <div class="ap-step ap-active">
+          <div class="ap-step-num active">3</div>
+          <div style="width:100%">
+            <div class="ap-step-label">Місткість та МГН</div>
+            <div class="ap-chips">
+              <div class="ap-chip">до 50 осіб</div>
+              <div class="ap-chip selected">50–200 осіб</div>
+              <div class="ap-chip">200–500 осіб</div>
+            </div>
+            <div class="ap-checkbox-row">
+              <div class="ap-checkbox checked"></div>
+              <span>Потрібен доступ для МГН (пандус, ліфт)</span>
+            </div>
+          </div>
+        </div>
+        <div class="ap-step ap-pending">
+          <div class="ap-step-num pending">4</div>
+          <div>
+            <div class="ap-step-text muted">Бюджет та обмеження</div>
+          </div>
+        </div>
+        <div class="ap-step ap-pending" style="margin-bottom:0">
+          <div class="ap-step-num pending">5</div>
+          <div>
+            <div class="ap-step-text muted">Пріоритет: швидкість / якість / вартість</div>
+          </div>
+        </div>
+      </div>
+      <div class="ap-footer-bar">
+        <span class="ap-hint">↓ Отримаєте PDF з типовим проєктом + чеклист ДБН</span>
+        <div class="ap-btn">Далі →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem-section" id="about">
+  <div class="problem-grid">
+    <div class="fade-up">
+      <div class="section-label">Проблема</div>
+      <h2 class="section-title">Укриття в Україні — хаос без системи</h2>
+      <p class="section-desc">
+        Тисячі організацій зобов'язані забезпечити укриттями своїх людей, але не мають доступу до практичних рішень. PDF-інструкцій та розрізнених нормативів недостатньо.
+      </p>
+    </div>
+    <div class="problem-cards fade-up">
+      <div class="problem-card">
+        <div class="problem-icon">📋</div>
+        <div>
+          <h4>Нема системного підходу</h4>
+          <p>Відсутній єдиний стандарт — кожен вирішує по-своєму, часто порушуючи норми ДБН</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">♿</div>
+        <div>
+          <h4>Ігноруються МГН</h4>
+          <p>Маломобільні групи залишаються без доступних рішень у більшості існуючих укриттів</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🌍</div>
+        <div>
+          <h4>Ізольованість від досвіду</h4>
+          <p>Перевірені рішення Фінляндії, Ізраїлю, Швейцарії не адаптовані під українські реалії</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">⏱️</div>
+        <div>
+          <h4>Тривалий старт</h4>
+          <p>Від рішення «потрібне укриття» до першого архітектурного плану — місяці пошуку підрядників</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how-section fade-up">
+    <div class="section-label">Рішення</div>
+    <h2 class="section-title">Посібник + помічник.<br>Не просто PDF.</h2>
+    <p class="section-desc">
+      RE:Ukraine Shelters — перший в Україні цифровий продукт, що об'єднує базу знань із доказовою базою і ШІ-інструментом персоналізованих рекомендацій.
+    </p>
+    <div class="steps-container">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">🏗️</div>
+        <h3>Цифровий посібник</h3>
+        <p>Структурована база знань: аналітика 5 країн, польові візити, нормативна база ДБН, 12 типових архітектурних проєктів у 4 категоріях.</p>
+        <div class="step-tags">
+          <span class="tag">Первинні укриття</span>
+          <span class="tag">Подвійне призначення</span>
+          <span class="tag">Індивідуальні</span>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">🤖</div>
+        <h3>Shelters Assistant</h3>
+        <p>Введіть параметри об'єкта — тип, місткість, бюджет, обмеження. Система автоматично сформує персоналізований пакет рішень.</p>
+        <div class="step-tags">
+          <span class="tag">Автоматична підбірка</span>
+          <span class="tag">PDF-звіт</span>
+          <span class="tag">ДБН-перевірка</span>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">🚀</div>
+        <h3>Від рекомендації до реалізації</h3>
+        <p>Команда Balbek Bureau готова супроводжувати від архітектурної концепції до авторського нагляду — як ваш надійний підрядник.</p>
+        <div class="step-tags">
+          <span class="tag">Basic</span>
+          <span class="tag">Advisory</span>
+          <span class="tag">Pro</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section class="audience-section" id="audience">
+  <div class="audience-inner">
+    <div class="section-label fade-up">Для кого</div>
+    <h2 class="section-title fade-up">Хто отримує найбільше</h2>
+    <div class="audience-grid">
+      <div class="audience-card fade-up">
+        <span class="aud-icon">🏫</span>
+        <h3>Освіта та медицина</h3>
+        <p>Директори шкіл, головні лікарі та завгоспи відповідають за безпеку сотень людей. Assistant дає чіткий старт без занурення в нормативи.</p>
+        <div class="aud-examples">
+          <strong>Приклади об'єктів</strong>
+          Школи, університети, лікарні, поліклініки
+        </div>
+      </div>
+      <div class="audience-card fade-up">
+        <span class="aud-icon">🏢</span>
+        <h3>Бізнес та девелопери</h3>
+        <p>Підприємства, ТРЦ та ЖК-забудовники, що мають зобов'язання щодо укриттів або хочуть інтегрувати їх у нові проєкти подвійного призначення.</p>
+        <div class="aud-examples">
+          <strong>Приклади об'єктів</strong>
+          Офісні центри, ЖК, промислові об'єкти
+        </div>
+      </div>
+      <div class="audience-card fade-up">
+        <span class="aud-icon">🏛️</span>
+        <h3>Архітектори та громади</h3>
+        <p>Проєктувальники, органи місцевого самоврядування та волонтерські ініціативи, яким потрібна структурована доказова база для рішень.</p>
+        <div class="aud-examples">
+          <strong>Приклади об'єктів</strong>
+          ОСББ, ОТГ, муніципальні будівлі
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section>
+  <div class="impact-section">
+    <div class="impact-row">
+      <div class="impact-metrics fade-up">
+        <div class="metric-card">
+          <div class="metric-value">5K+</div>
+          <div class="metric-label">очікуваних<br>користувачів посібника</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">1.5K</div>
+          <div class="metric-label">звернень до<br>Shelters Assistant</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">200+</div>
+          <div class="metric-label">об'єктів із<br>рекомендаціями</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">1.65M</div>
+          <div class="metric-label">охоплення<br>інфокампанії</div>
+        </div>
+      </div>
+      <div class="impact-text fade-up">
+        <div class="section-label">Чому ми?</div>
+        <h2 class="section-title">Єдиний продукт такого рівня в Україні</h2>
+        <p>Жоден аналог не поєднує доказову базу з 5 країн, польові візити, 4 категорії типових рішень та автоматизовану персоналізацію в одному продукті.</p>
+        <div class="compare-table">
+          <div class="compare-row header">
+            <div class="compare-cell">Параметр</div>
+            <div class="compare-cell ours">RE:U Shelters</div>
+            <div class="compare-cell">Острів</div>
+            <div class="compare-cell">НСАУ</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-cell">Формат продукту</div>
+            <div class="compare-cell ours">Посібник + помічник</div>
+            <div class="compare-cell">Лише посібник</div>
+            <div class="compare-cell">Курс</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-cell">Персоналізація</div>
+            <div class="compare-cell ours"><span class="check">✓</span> Автоматично</div>
+            <div class="compare-cell"><span class="cross">○</span> Вручну</div>
+            <div class="compare-cell"><span class="cross">—</span></div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-cell">Типових рішень</div>
+            <div class="compare-cell ours"><span class="check">✓</span> 4 категорії</div>
+            <div class="compare-cell">1 категорія</div>
+            <div class="compare-cell"><span class="cross">—</span></div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-cell">Доказова база</div>
+            <div class="compare-cell ours"><span class="check">✓</span> 5 країн + візити</div>
+            <div class="compare-cell">Без візитів</div>
+            <div class="compare-cell">1 країна</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEVELOPER SECTION -->
+<section class="dev-section" id="developer">
+  <div class="dev-inner">
+    <div class="dev-header">
+      <div class="dev-title-block fade-up">
+        <div class="section-label">Для девелоперів</div>
+        <h2 class="section-title">Укриття подвійного призначення — ваша конкурентна перевага</h2>
+        <p class="section-desc">Нові ЖК та комерційні об'єкти зобов'язані мати укриття. Але укриття може бути не просто нормативним навантаженням — а повноцінним простором, який приносить користь у мирний час.</p>
+      </div>
+      <div class="dev-pitch fade-up">
+        <p class="dev-pitch-text">Ми проєктуємо укриття, які <em>залишаються живими</em> — як паркінги, зони відпочинку, спортивні зали та коворкінги.</p>
+        <p>Команда Balbek Bureau розробила методологію укриттів подвійного призначення, засновану на міжнародному досвіді Фінляндії, Швейцарії та Ізраїлю. Від архітектурної концепції до авторського нагляду — ми ведемо проєкт повністю.</p>
+        <div class="step-tags">
+          <span class="tag">Відповідність ДБН В.2.2-5:2023</span>
+          <span class="tag">Інклюзивний доступ МГН</span>
+          <span class="tag">Подвійне функціонування</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dev-tiers fade-up">
+      <div class="dev-tier">
+        <div class="dev-tier-name">Basic</div>
+        <div class="dev-tier-title">Adaptation Consulting</div>
+        <div class="dev-tier-price">5 000–10 000 €</div>
+        <div class="dev-tier-price-sub">за проєкт · 2–4 тижні</div>
+        <ul class="dev-tier-items">
+          <li>Консультація + аналіз локації та контексту</li>
+          <li>Рекомендації щодо планування, доступності та комфорту</li>
+          <li>Оцінка відповідності нормативам</li>
+          <li>Не включає проєктування</li>
+        </ul>
+      </div>
+      <div class="dev-tier featured">
+        <div class="dev-tier-name">Advisory</div>
+        <div class="dev-tier-title">Author Supervision</div>
+        <div class="dev-tier-price">1 500–3 000 € / міс</div>
+        <div class="dev-tier-price-sub">або 100–150 € / год · 1–2 місяці</div>
+        <ul class="dev-tier-items">
+          <li>Експертний супровід команди реалізації</li>
+          <li>Рев'ю та оптимізація дизайн-рішень</li>
+          <li>Участь у робочих зустрічах із замовником та підрядниками</li>
+          <li>Контроль якості на етапі будівництва</li>
+        </ul>
+      </div>
+      <div class="dev-tier">
+        <div class="dev-tier-name">Pro</div>
+        <div class="dev-tier-title">Shelter Architecture Concept</div>
+        <div class="dev-tier-price">15 000–40 000 €</div>
+        <div class="dev-tier-price-sub">за повний цикл проєктування</div>
+        <ul class="dev-tier-items">
+          <li>Розробка концепції укриття подвійного призначення</li>
+          <li>Планувальні рішення та сценарії використання</li>
+          <li>Рекомендації для інженерних команд</li>
+          <li>Підготовка матеріалів для тендеру</li>
+          <li>Авторський нагляд до здачі об'єкта</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dev-advantages fade-up">
+      <div class="dev-adv">
+        <div class="dev-adv-icon">🏗️</div>
+        <h4>Проєкт + реалізація</h4>
+        <p>Не просто рекомендації — повний цикл від концепції до готового укриття з авторським наглядом</p>
+      </div>
+      <div class="dev-adv">
+        <div class="dev-adv-icon">📋</div>
+        <h4>ДБН-відповідність</h4>
+        <p>Всі рішення розроблені відповідно до ДБН В.2.2-5:2023 та норм інклюзивності ДБН В.2.2-40:2018</p>
+      </div>
+      <div class="dev-adv">
+        <div class="dev-adv-icon">🌍</div>
+        <h4>Міжнародний досвід</h4>
+        <p>Рішення перевірені польовими візитами у 5 країн — Фінляндія, Швейцарія, Ізраїль та інші</p>
+      </div>
+      <div class="dev-adv">
+        <div class="dev-adv-icon">⚡</div>
+        <h4>Швидкий старт</h4>
+        <p>Завдяки базі типових рішень — скорочуємо передпроєктний етап і вартість розробки</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="partners-section" id="partners">
+  <div class="partners-inner">
+    <div class="section-label fade-up">Партнери</div>
+    <h2 class="section-title fade-up">Підтримка на рівні держави та бізнесу</h2>
+    <div class="partners-grid fade-up">
+      <div class="partner-card">
+        <h4>МЗС України</h4>
+        <p>Меморандум. Розробка дизайн-концепції та рекомендацій стосовно укриттів</p>
+      </div>
+      <div class="partner-card">
+        <h4>ДСНС</h4>
+        <p>Меморандум. Департамент цивільного захисту</p>
+      </div>
+      <div class="partner-card">
+        <h4>Укрнафта</h4>
+        <p>Розробка типових рішень сховищ подвійного призначення на 50 осіб</p>
+      </div>
+      <div class="partner-card">
+        <h4>Бучанська громада</h4>
+        <p>Розробка проєктного рішення укриття на 180 осіб</p>
+      </div>
+      <div class="partner-card">
+        <h4>4Service GmbH</h4>
+        <p>Соціологічне дослідження потреб населення щодо використання укриттів</p>
+      </div>
+      <div class="partner-card">
+        <h4>КНУБА</h4>
+        <p>Лекції для студентів та залучення до роботи над проєктом</p>
+      </div>
+      <div class="partner-card">
+        <h4>Swiss Contact / EdUP</h4>
+        <p>Відвідування реалізованих укриттів та обмін ідеями</p>
+      </div>
+      <div class="partner-card">
+        <h4>CAS Rebuild Ukraine</h4>
+        <p>Обмін досвідом та спільні вебінари — Бернський університет</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="section-label fade-up">Почати зараз</div>
+  <h2 class="cta-title fade-up">Готові обладнати<br><span style="color:var(--orange)">безпечне укриття?</span></h2>
+  <p class="cta-desc fade-up">Скористайтесь Shelters Assistant — безкоштовним інструментом підбору рішень — або зверніться до команди Balbek Bureau для повного супроводу.</p>
+  <div class="cta-buttons fade-up">
+    <a href="#" class="btn-primary">
+      Відкрити Shelters Assistant
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a href="mailto:hello@reukraine.org" class="btn-secondary">Написати нам</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="nav-logo" style="display:inline-flex;margin-bottom:12px">
+      <div class="logo-text">Shelters<span>Initiative by RE:Ukraine</span></div>
+    </div>
+    <p class="footer-tagline">Цифровий посібник систем укриттів і веб-помічник. БО "БФ "Балбек Бюро"</p>
+  </div>
+  <div class="footer-col">
+    <h5>Продукт</h5>
+    <a href="#">Цифровий посібник</a>
+    <a href="#">Shelters Assistant</a>
+    <a href="#">Типові рішення</a>
+    <a href="#">Завантажити PDF</a>
+  </div>
+  <div class="footer-col">
+    <h5>Організація</h5>
+    <a href="https://reukraine.org">reukraine.org</a>
+    <a href="https://balbek.com">balbek bureau</a>
+    <a href="#">Про команду</a>
+    <a href="#">Партнери</a>
+  </div>
+  <div class="footer-col">
+    <h5>Контакти</h5>
+    <a href="mailto:hello@reukraine.org">hello@reukraine.org</a>
+    <a href="mailto:a.nosovska@balbek.com">a.nosovska@balbek.com</a>
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 БО "БФ "Балбек Бюро". Проєкт реалізується за підтримки ACT to Drive Change / Фонд Східна Європа / ЄС</span>
+    <span>Shelters — Initiative by RE:Ukraine</span>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for fade-up animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 80}ms`;
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
