@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Олена Цисар · CX як зріла система</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-900:#0e1a2e;
+    --navy-800:#15243d;
+    --navy-700:#1c3054;
+    --navy-600:#233d6b;
+    --navy-500:#2f4e86;
+    --navy-line:rgba(255,255,255,.08);
+    --ink:#e9edf4;
+    --ink-soft:rgba(233,237,244,.72);
+    --ink-mute:rgba(233,237,244,.48);
+    --orange:#e67e22;
+    --orange-hot:#f08b2f;
+    --orange-soft:rgba(230,126,34,.14);
+    --blue:#3b82f6;
+    --blue-soft:rgba(59,130,246,.18);
+    --cream:#f4efe6;
+    --shadow-lg:0 30px 60px -20px rgba(0,0,0,.55);
+    --shadow-md:0 14px 30px -12px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Montserrat',sans-serif;
+    background:var(--navy-900);
+    color:var(--ink);
+    font-weight:400;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--orange);color:#fff}
+
+  /* ---------- Reusable ---------- */
+  .container{max-width:1280px;margin:0 auto;padding:0 32px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:12px;
+    font-size:12px;font-weight:700;letter-spacing:.28em;
+    color:var(--orange);text-transform:uppercase;
+  }
+  .eyebrow::before{
+    content:"";width:28px;height:1px;background:var(--orange);
+  }
+  h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;line-height:1.05}
+  .display{
+    font-size:clamp(44px,8vw,120px);
+    font-weight:800;letter-spacing:-.035em;line-height:.95;
+  }
+  .h2{font-size:clamp(32px,4.6vw,62px);font-weight:800;letter-spacing:-.025em}
+  .h3{font-size:clamp(22px,2.4vw,32px);font-weight:700;letter-spacing:-.015em}
+  .lead{font-size:clamp(16px,1.4vw,19px);color:var(--ink-soft);font-weight:400;line-height:1.6;max-width:640px}
+  .btn{
+    display:inline-flex;align-items:center;gap:14px;
+    padding:18px 30px;background:var(--orange);color:#0e1a2e;
+    font-weight:700;font-size:15px;letter-spacing:.02em;
+    border:none;cursor:pointer;text-decoration:none;
+    transition:transform .25s cubic-bezier(.2,.8,.3,1.2),background .2s;
+    border-radius:2px;
+  }
+  .btn:hover{background:var(--orange-hot);transform:translate(-2px,-2px);box-shadow:4px 4px 0 0 var(--ink)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid rgba(255,255,255,.2)}
+  .btn.ghost:hover{background:var(--ink);color:var(--navy-900);box-shadow:4px 4px 0 0 var(--orange)}
+  .btn .arrow{transition:transform .3s}
+  .btn:hover .arrow{transform:translateX(4px)}
+
+  /* ---------- NAVIGATION ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    padding:22px 32px;
+    backdrop-filter:blur(14px);
+    background:rgba(14,26,46,.65);
+    border-bottom:1px solid var(--navy-line);
+  }
+  nav .wrap{
+    max-width:1280px;margin:0 auto;display:flex;
+    align-items:center;justify-content:space-between;gap:24px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:14px;
+    font-weight:800;font-size:13px;letter-spacing:.25em;
+    text-transform:uppercase;color:var(--ink);
+  }
+  .brand-mark{
+    width:34px;height:34px;position:relative;
+    background:var(--orange);
+    display:grid;place-items:center;
+    font-size:15px;color:var(--navy-900);font-weight:900;
+  }
+  .brand-mark::after{
+    content:"";position:absolute;inset:-3px;
+    border:1px solid var(--orange);
+    opacity:.4;
+  }
+  .nav-links{display:flex;gap:36px;list-style:none}
+  .nav-links a{
+    color:var(--ink-soft);text-decoration:none;
+    font-size:13px;font-weight:500;letter-spacing:.05em;
+    position:relative;transition:color .2s;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:-6px;
+    width:0;height:1px;background:var(--orange);transition:width .3s;
+  }
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links a:hover::after{width:100%}
+  .nav-cta{font-size:12px;padding:11px 20px}
+  @media(max-width:880px){.nav-links{display:none}}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;min-height:100vh;
+    padding:180px 0 120px;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 88% 12%, rgba(230,126,34,.08), transparent 40%),
+      radial-gradient(circle at 4% 80%, rgba(59,130,246,.08), transparent 42%),
+      linear-gradient(180deg, var(--navy-900), var(--navy-800));
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:80px 80px;
+    mask-image:radial-gradient(ellipse at center, #000 30%, transparent 80%);
+    pointer-events:none;
+  }
+  .hero-stripe{
+    position:absolute;left:0;top:0;bottom:0;width:10px;
+    background:var(--orange);
+  }
+  .hero-content{
+    position:relative;z-index:2;
+    display:grid;grid-template-columns:1.25fr .9fr;gap:80px;
+    align-items:end;
+  }
+  .hero-kicker{
+    font-size:12px;font-weight:700;letter-spacing:.3em;
+    color:var(--orange);text-transform:uppercase;
+    margin-bottom:32px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .hero-kicker span{
+    width:4px;height:4px;background:var(--orange);border-radius:50%;
+  }
+  .hero h1{
+    font-size:clamp(48px,8.2vw,128px);
+    font-weight:800;line-height:.92;letter-spacing:-.04em;
+    margin-bottom:40px;
+  }
+  .hero h1 em{
+    font-style:italic;font-weight:300;
+    background:linear-gradient(120deg, var(--orange), #ffb063);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero-sub{
+    font-size:19px;color:var(--ink-soft);
+    max-width:580px;line-height:1.6;margin-bottom:48px;
+  }
+  .hero-cta-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:60px}
+  .hero-products{
+    display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;
+  }
+  .pill{
+    padding:12px 22px;font-size:13px;font-weight:600;letter-spacing:.04em;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:999px;color:var(--ink);
+    transition:all .25s;cursor:pointer;
+    background:rgba(255,255,255,.02);
+  }
+  .pill:hover{background:var(--orange);color:var(--navy-900);border-color:var(--orange)}
+  .pill.active{background:var(--orange);color:var(--navy-900);border-color:var(--orange);font-weight:700}
+  /* Right column - visual card */
+  .hero-card{
+    position:relative;padding:38px;
+    background:linear-gradient(150deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+    border:1px solid var(--navy-line);
+    backdrop-filter:blur(10px);
+  }
+  .hero-card::before{
+    content:"";position:absolute;top:-1px;left:-1px;width:60px;height:4px;
+    background:var(--orange);
+  }
+  .hero-card-label{
+    font-size:11px;letter-spacing:.3em;color:var(--orange);
+    font-weight:700;margin-bottom:28px;text-transform:uppercase;
+  }
+  .hero-card h3{font-size:26px;margin-bottom:14px;font-weight:700}
+  .hero-card p{font-size:14px;color:var(--ink-soft);line-height:1.6;margin-bottom:28px}
+  .hero-card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding-top:24px;border-top:1px solid var(--navy-line)}
+  .hero-card-grid .n{font-size:28px;font-weight:800;color:var(--orange);letter-spacing:-.02em;display:block;line-height:1}
+  .hero-card-grid .l{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-mute);margin-top:6px;display:block}
+  @media(max-width:900px){
+    .hero-content{grid-template-columns:1fr;gap:50px}
+    .hero-card{order:2}
+  }
+
+  .hero-meta{
+    position:absolute;bottom:30px;left:32px;right:32px;
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    font-size:12px;color:var(--ink-mute);letter-spacing:.15em;text-transform:uppercase;
+    padding-top:20px;border-top:1px solid var(--navy-line);
+    max-width:1216px;margin:0 auto;
+  }
+  .hero-meta-scroll{display:flex;align-items:center;gap:12px}
+  .hero-meta-scroll .line{
+    width:40px;height:1px;background:var(--orange);position:relative;
+    animation:scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine{
+    0%,100%{transform:scaleX(1);transform-origin:left}
+    50%{transform:scaleX(.4);transform-origin:right}
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about{
+    padding:140px 0;position:relative;
+    background:linear-gradient(180deg, var(--navy-800), var(--navy-900));
+  }
+  .about-grid{
+    display:grid;grid-template-columns:.9fr 1.3fr;gap:80px;align-items:center;
+  }
+  .about-photo{
+    position:relative;aspect-ratio:3/4;
+    background:linear-gradient(140deg,#2a4066,#1a2d4a);
+    overflow:hidden;
+  }
+  .about-photo::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(230,126,34,.18), transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(59,130,246,.2), transparent 45%);
+  }
+  .about-photo::after{
+    content:"OT";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    font-size:220px;font-weight:800;color:rgba(255,255,255,.05);letter-spacing:-.05em;
+  }
+  .about-photo-badge{
+    position:absolute;bottom:24px;left:24px;
+    padding:10px 16px;background:var(--orange);color:var(--navy-900);
+    font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  }
+  .about-photo-frame{
+    position:absolute;inset:14px;border:1px solid rgba(255,255,255,.1);
+    pointer-events:none;
+  }
+  .about-label{font-size:12px;font-weight:700;letter-spacing:.3em;color:var(--orange);margin-bottom:28px;text-transform:uppercase}
+  .about h2{font-size:clamp(36px,5vw,68px);margin-bottom:28px;font-weight:800;letter-spacing:-.03em}
+  .about-intro{font-size:18px;color:var(--ink-soft);margin-bottom:44px;line-height:1.65;max-width:620px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:48px;background:var(--navy-line)}
+  .stat{padding:32px 24px;background:var(--navy-800);position:relative;overflow:hidden;transition:background .3s}
+  .stat:hover{background:var(--navy-700)}
+  .stat::before{
+    content:"";position:absolute;top:0;left:0;width:28px;height:3px;background:var(--orange);
+  }
+  .stat-num{font-size:44px;font-weight:800;letter-spacing:-.03em;color:var(--ink);line-height:1}
+  .stat-num .plus{color:var(--orange)}
+  .stat-label{font-size:12px;color:var(--ink-mute);margin-top:10px;letter-spacing:.15em;text-transform:uppercase}
+  .bio-list{list-style:none;display:flex;flex-direction:column;gap:14px}
+  .bio-list li{
+    padding-left:28px;position:relative;font-size:15px;
+    color:var(--ink-soft);line-height:1.5;
+  }
+  .bio-list li::before{
+    content:"";position:absolute;left:0;top:9px;
+    width:14px;height:1px;background:var(--orange);
+  }
+  .bio-list strong{color:var(--ink);font-weight:600}
+  @media(max-width:880px){.about-grid{grid-template-columns:1fr;gap:50px}.stats{grid-template-columns:1fr}}
+
+  /* ---------- PROBLEM ---------- */
+  .problem{
+    padding:140px 0;position:relative;
+    background:var(--navy-900);
+  }
+  .problem-header{max-width:900px;margin-bottom:70px}
+  .problem-header .eyebrow{margin-bottom:24px}
+  .problem-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
+    background:var(--navy-line);
+    margin-bottom:40px;
+  }
+  .symptom{
+    padding:38px 30px;background:var(--navy-800);position:relative;
+    min-height:180px;display:flex;flex-direction:column;justify-content:space-between;
+    transition:background .25s, transform .25s;cursor:default;
+  }
+  .symptom:hover{background:var(--navy-700);transform:translateY(-2px)}
+  .symptom-num{
+    font-size:12px;font-weight:700;letter-spacing:.2em;color:var(--orange);
+    margin-bottom:20px;
+  }
+  .symptom-text{font-size:17px;font-weight:600;line-height:1.4;letter-spacing:-.01em}
+  .symptom::after{
+    content:"";position:absolute;top:0;left:0;width:100%;height:2px;
+    background:var(--orange);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.2,.8,.3,1);
+  }
+  .symptom:hover::after{transform:scaleX(1)}
+  .problem-conclusion{
+    padding:28px 36px;background:var(--orange);color:var(--navy-900);
+    font-size:18px;font-weight:700;letter-spacing:-.01em;
+    display:flex;align-items:center;gap:18px;
+  }
+  .problem-conclusion::before{
+    content:"→";font-size:28px;font-weight:800;
+  }
+  @media(max-width:880px){.problem-grid{grid-template-columns:1fr}}
+
+  /* ---------- SOLUTION / 6 Components ---------- */
+  .solution{
+    padding:140px 0;position:relative;
+    background:linear-gradient(180deg, var(--navy-900), var(--navy-800));
+  }
+  .solution-head{
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:70px;
+  }
+  .solution h2{font-size:clamp(36px,5.2vw,72px);letter-spacing:-.03em}
+  .solution h2 em{font-style:normal;color:var(--orange)}
+  .components{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--navy-line)}
+  .component{
+    padding:44px 34px;background:var(--navy-800);
+    position:relative;min-height:280px;
+    display:flex;flex-direction:column;
+    transition:all .3s cubic-bezier(.2,.8,.3,1);overflow:hidden;
+  }
+  .component::before{
+    content:"";position:absolute;left:0;top:0;width:3px;height:50px;
+    background:var(--blue);transition:height .4s ease, background .3s;
+  }
+  .component:hover{background:var(--navy-700)}
+  .component:hover::before{height:100%;background:var(--orange)}
+  .component-num{
+    font-size:42px;font-weight:800;color:var(--orange);
+    letter-spacing:-.03em;line-height:1;margin-bottom:28px;
+  }
+  .component-title{
+    font-size:22px;font-weight:700;margin-bottom:16px;letter-spacing:-.01em;
+  }
+  .component-desc{font-size:14px;color:var(--ink-soft);line-height:1.6}
+  .component-icon{
+    position:absolute;top:36px;right:30px;opacity:.12;
+    font-size:60px;font-weight:800;color:var(--ink);
+  }
+  @media(max-width:900px){
+    .solution-head{grid-template-columns:1fr;gap:30px}
+    .components{grid-template-columns:1fr}
+  }
+
+  /* ---------- MATURITY MODEL ---------- */
+  .maturity{
+    padding:140px 0;background:var(--navy-900);position:relative;overflow:hidden;
+  }
+  .maturity::before{
+    content:"";position:absolute;top:0;right:0;width:40%;height:100%;
+    background:radial-gradient(circle at 100% 50%, rgba(230,126,34,.06), transparent 60%);
+    pointer-events:none;
+  }
+  .maturity-head{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-bottom:80px;align-items:end}
+  .maturity h2 em{font-style:normal;color:var(--orange);font-weight:800}
+  .levels{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:4px;
+    align-items:end;margin-bottom:60px;position:relative;
+  }
+  .level{
+    position:relative;cursor:pointer;
+    transition:transform .3s cubic-bezier(.2,.8,.3,1);
+  }
+  .level:hover{transform:translateY(-8px)}
+  .level-bar{
+    width:100%;padding:28px 18px;color:#fff;
+    display:flex;flex-direction:column;justify-content:space-between;
+    position:relative;overflow:hidden;
+    transition:filter .25s;
+  }
+  .level-bar:hover{filter:brightness(1.15)}
+  .level-1 .level-bar{background:#c0433a;height:180px}
+  .level-2 .level-bar{background:#e58123;height:230px}
+  .level-3 .level-bar{background:#2c9e4b;height:290px}
+  .level-4 .level-bar{background:#2e7fd0;height:350px}
+  .level-5 .level-bar{background:#7a4bbf;height:410px}
+  .level-num{font-size:52px;font-weight:800;line-height:1;letter-spacing:-.04em;margin-bottom:14px}
+  .level-desc{font-size:12px;line-height:1.45;color:rgba(255,255,255,.92);font-weight:500}
+  .level-label{
+    margin-top:14px;font-size:14px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink);text-align:center;
+  }
+  .level-stage{
+    position:absolute;top:10px;right:12px;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:600;
+  }
+  .maturity-footer{
+    text-align:center;padding:28px;
+    border-top:1px solid var(--navy-line);margin-top:40px;
+    font-size:15px;color:var(--ink-soft);font-style:italic;
+  }
+  @media(max-width:780px){
+    .maturity-head{grid-template-columns:1fr;gap:28px}
+    .levels{grid-template-columns:1fr;gap:8px}
+    .level-bar{height:auto !important;min-height:120px}
+    .level-1 .level-bar,.level-2 .level-bar,.level-3 .level-bar,.level-4 .level-bar,.level-5 .level-bar{height:auto}
+  }
+
+  /* ---------- PRODUCTS ---------- */
+  .products{
+    padding:140px 0;background:var(--navy-800);position:relative;
+  }
+  .products-header{max-width:900px;margin-bottom:70px}
+  .products h2 em{font-style:normal;color:var(--orange)}
+  .products-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+  }
+  .product{
+    position:relative;padding:44px 34px 120px;background:var(--navy-900);
+    border:1px solid var(--navy-line);overflow:hidden;
+    transition:all .35s cubic-bezier(.2,.8,.3,1);
+    min-height:420px;display:flex;flex-direction:column;
+  }
+  .product::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--orange);
+    transform:scaleX(.3);transform-origin:left;transition:transform .45s cubic-bezier(.2,.8,.3,1);
+  }
+  .product:hover::before{transform:scaleX(1)}
+  .product:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+  .product-num{
+    font-size:56px;font-weight:800;color:var(--orange);
+    letter-spacing:-.04em;line-height:1;margin-bottom:24px;
+  }
+  .product-title{
+    font-size:13px;font-weight:800;letter-spacing:.25em;
+    color:var(--ink);text-transform:uppercase;margin-bottom:20px;
+  }
+  .product-tagline{
+    font-size:22px;font-weight:700;letter-spacing:-.01em;
+    line-height:1.25;color:var(--ink);margin-bottom:22px;
+  }
+  .product-divider{width:40px;height:1px;background:var(--orange);margin-bottom:22px}
+  .product-desc{font-size:14px;color:var(--ink-soft);line-height:1.65}
+  .product-mono{
+    position:absolute;bottom:-10px;right:-10px;
+    font-size:160px;font-weight:900;color:rgba(255,255,255,.03);
+    line-height:1;letter-spacing:-.05em;pointer-events:none;
+  }
+  @media(max-width:900px){.products-grid{grid-template-columns:1fr}}
+
+  /* ---------- AUDIT DETAIL / PROCESS ---------- */
+  .process{
+    padding:140px 0;background:var(--navy-900);
+  }
+  .process-head{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:60px}
+  .process-grid{
+    display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;
+  }
+  .process-panel{
+    padding:38px;background:var(--navy-800);border-left:3px solid var(--orange);
+  }
+  .process-panel.blue{border-left-color:var(--blue)}
+  .process-panel h3{font-size:22px;margin-bottom:20px;font-weight:700}
+  .process-panel .panel-label{
+    font-size:12px;font-weight:700;letter-spacing:.25em;color:var(--orange);
+    margin-bottom:14px;text-transform:uppercase;
+  }
+  .process-panel.blue .panel-label{color:var(--blue)}
+  .panel-text{font-size:15px;line-height:1.65;color:var(--ink-soft)}
+  .panel-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:10px}
+  .panel-list li{font-size:14px;color:var(--ink-soft);line-height:1.5;padding-left:20px;position:relative}
+  .panel-list li::before{content:"•";position:absolute;left:0;color:var(--orange);font-weight:800;font-size:18px;line-height:1}
+  .steps{list-style:none;display:flex;flex-direction:column;gap:16px}
+  .step{
+    display:flex;gap:22px;align-items:flex-start;
+    padding:18px 0;border-bottom:1px solid var(--navy-line);
+  }
+  .step:last-child{border-bottom:none}
+  .step-n{
+    flex-shrink:0;width:38px;height:38px;border-radius:50%;
+    background:var(--orange);color:var(--navy-900);
+    display:grid;place-items:center;font-weight:800;font-size:15px;
+  }
+  .step-t{font-size:15px;color:var(--ink);font-weight:500;line-height:1.5;padding-top:8px}
+  @media(max-width:900px){.process-head,.process-grid{grid-template-columns:1fr}}
+
+  /* ---------- WORKSHOPS 2026 ---------- */
+  .workshops{
+    padding:140px 0;background:linear-gradient(180deg, var(--navy-900), var(--navy-800));position:relative;
+  }
+  .workshops-head{max-width:900px;margin-bottom:70px}
+  .workshops h2{font-size:clamp(40px,6vw,82px)}
+  .workshop-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  .workshop{
+    position:relative;padding:46px 38px;
+    background:linear-gradient(160deg, var(--navy-700), var(--navy-800));
+    border:1px solid var(--navy-line);overflow:hidden;
+    transition:transform .3s;
+  }
+  .workshop:hover{transform:translateY(-4px)}
+  .workshop-tag{
+    position:absolute;top:24px;right:24px;
+    padding:7px 14px;background:var(--orange);color:var(--navy-900);
+    font-size:11px;font-weight:800;letter-spacing:.15em;
+  }
+  .workshop-tag::before{content:"NEW · "}
+  .workshop h3{font-size:28px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
+  .workshop-sub{
+    color:var(--orange);font-size:14px;font-weight:500;
+    font-style:italic;margin-bottom:30px;
+  }
+  .workshop-items{list-style:none;display:flex;flex-direction:column;gap:14px}
+  .workshop-items li{
+    font-size:15px;color:var(--ink-soft);line-height:1.5;
+    padding-left:22px;position:relative;
+  }
+  .workshop-items li::before{
+    content:"";position:absolute;left:0;top:10px;
+    width:10px;height:1px;background:var(--orange);
+  }
+  @media(max-width:880px){.workshop-grid{grid-template-columns:1fr}}
+
+  /* ---------- FORMATS ---------- */
+  .formats{padding:140px 0;background:var(--navy-900)}
+  .formats-head{margin-bottom:70px;max-width:900px}
+  .format-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .format{
+    position:relative;padding:40px 32px;background:var(--navy-800);
+    border-left:3px solid var(--blue);
+    transition:all .3s;
+  }
+  .format:hover{background:var(--navy-700);border-left-color:var(--orange)}
+  .format h3{font-size:24px;margin-bottom:10px;font-weight:700;letter-spacing:-.015em}
+  .format-sub{
+    color:var(--orange);font-size:13px;font-weight:500;
+    font-style:italic;margin-bottom:26px;
+  }
+  .format-divider{width:40px;height:1px;background:var(--navy-line);margin-bottom:26px}
+  .format-desc{font-size:14px;color:var(--ink-soft);line-height:1.6;margin-bottom:30px;min-height:80px}
+  .format-tags{
+    padding-top:20px;border-top:1px solid var(--navy-line);
+    font-size:11px;color:var(--ink-mute);letter-spacing:.1em;text-transform:uppercase;
+  }
+  @media(max-width:900px){.format-grid{grid-template-columns:1fr}}
+
+  /* ---------- PRICING ---------- */
+  .pricing{
+    padding:140px 0;background:var(--navy-800);position:relative;
+    border-top:1px solid var(--navy-line);
+  }
+  .pricing-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:80px;align-items:center}
+  .pricing h2{font-size:clamp(40px,6vw,82px);margin-bottom:28px}
+  .pricing h2 em{font-style:italic;color:var(--orange);font-weight:300}
+  .pricing-lead{font-size:17px;color:var(--ink-soft);line-height:1.7;margin-bottom:44px;max-width:540px}
+  .price-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px}
+  .price-box{
+    padding:24px 20px;background:var(--navy-900);
+    border-top:3px solid var(--orange);
+  }
+  .price-box h4{font-size:16px;font-weight:700;margin-bottom:10px;letter-spacing:-.005em}
+  .price-box p{font-size:12px;color:var(--ink-soft);line-height:1.5}
+  .pricing-cta{
+    display:inline-flex;align-items:center;gap:16px;
+    padding:22px 34px;background:var(--orange);color:var(--navy-900);
+    font-weight:700;font-size:16px;letter-spacing:.02em;
+    text-decoration:none;transition:all .3s;
+    border-radius:2px;
+  }
+  .pricing-cta:hover{background:var(--orange-hot);transform:translate(-2px,-2px);box-shadow:4px 4px 0 0 var(--ink)}
+  .pricing-side{
+    padding:48px;background:var(--navy-900);border:1px solid var(--navy-line);
+    position:relative;
+  }
+  .pricing-side::before{
+    content:"";position:absolute;left:-1px;top:20px;width:40px;height:3px;background:var(--orange);
+  }
+  .pricing-side h3{font-size:22px;margin-bottom:20px;font-weight:700}
+  .pricing-side p{font-size:14px;color:var(--ink-soft);line-height:1.7;margin-bottom:28px}
+  .pricing-contact{display:flex;flex-direction:column;gap:14px;padding-top:24px;border-top:1px solid var(--navy-line)}
+  .pricing-contact a{color:var(--orange);text-decoration:none;font-weight:500;font-size:15px;display:flex;align-items:center;gap:10px;transition:gap .2s}
+  .pricing-contact a:hover{gap:16px}
+  @media(max-width:900px){.pricing-grid{grid-template-columns:1fr;gap:40px}.price-boxes{grid-template-columns:1fr}}
+
+  /* ---------- FINAL CTA ---------- */
+  .final{
+    padding:160px 0;background:var(--navy-900);position:relative;overflow:hidden;
+  }
+  .final::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--orange);
+  }
+  .final-inner{max-width:1000px;position:relative}
+  .final h2{
+    font-size:clamp(56px,10vw,160px);font-weight:800;
+    letter-spacing:-.04em;line-height:.92;margin-bottom:40px;
+  }
+  .final h2 .period{color:var(--orange)}
+  .final-sub{
+    font-size:22px;color:var(--ink-soft);line-height:1.5;
+    max-width:640px;margin-bottom:50px;font-weight:300;
+  }
+  .final-sub strong{color:var(--ink);font-weight:600}
+  .final-contact{
+    display:flex;align-items:center;gap:28px;flex-wrap:wrap;
+    padding-top:40px;border-top:1px solid var(--navy-line);
+  }
+  .final-email{
+    font-size:20px;color:var(--orange);text-decoration:none;font-weight:500;
+    letter-spacing:-.005em;
+  }
+  .final-email:hover{text-decoration:underline;text-underline-offset:4px}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:60px 0 40px;background:var(--navy-900);
+    border-top:1px solid var(--navy-line);
+  }
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap}
+  .foot-brand{display:flex;align-items:center;gap:14px}
+  .foot-brand .brand-mark{width:28px;height:28px;font-size:12px}
+  .foot-brand span{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+  .foot-meta{font-size:12px;color:var(--ink-mute);letter-spacing:.1em}
+
+  /* ---------- Reveal animation ---------- */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.2,.8,.3,1),transform .8s cubic-bezier(.2,.8,.3,1)}
+  .reveal.in{opacity:1;transform:translateY(0)}
+  .reveal.d1{transition-delay:.08s}
+  .reveal.d2{transition-delay:.16s}
+  .reveal.d3{transition-delay:.24s}
+  .reveal.d4{transition-delay:.32s}
+  .reveal.d5{transition-delay:.4s}
+  .reveal.d6{transition-delay:.48s}
+
+  @media(max-width:680px){
+    .container{padding:0 20px}
+    nav{padding:16px 20px}
+    .hero{padding:140px 0 100px}
+    .hero-meta{position:static;margin-top:60px;padding:20px 0}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="wrap">
+    <a href="#" class="brand">
+      <span class="brand-mark">OT</span>
+      <span>Олена Цисар</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">Про мене</a></li>
+      <li><a href="#problem">Проблема</a></li>
+      <li><a href="#solution">Рішення</a></li>
+      <li><a href="#maturity">Методологія</a></li>
+      <li><a href="#products">Продукти</a></li>
+    </ul>
+    <a href="#pricing" class="btn nav-cta">Запис на зустріч <span class="arrow">→</span></a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-stripe"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div>
+        <div class="hero-kicker reveal">Олена Цисар <span></span> CX Expert <span></span> Ukraine · Austria</div>
+        <h1 class="reveal d1">CX як <em>зріла</em><br>система</h1>
+        <p class="hero-sub reveal d2">Авторська методологія <strong style="color:var(--ink)">CX&nbsp;Maturity&nbsp;Model</strong> для побудови клієнтського досвіду як бізнес-системи — не проєкту, а способу мислення.</p>
+        <div class="hero-cta-row reveal d3">
+          <a href="#pricing" class="btn">Запишіться на зустріч <span class="arrow">→</span></a>
+          <a href="#maturity" class="btn ghost">Методологія</a>
+        </div>
+        <div class="hero-products reveal d4">
+          <div class="pill active">Аудит</div>
+          <div class="pill">Стратегія</div>
+          <div class="pill">Впровадження</div>
+        </div>
+      </div>
+      <aside class="hero-card reveal d3">
+        <div class="hero-card-label">◆ За цифрами</div>
+        <h3>Партнерка 4Service Group</h3>
+        <p>Міжнародна експертка зі стратегічного розвитку CX. Дослідниця. Менторка. Голова методради першої української премії з CX — UCXE.</p>
+        <div class="hero-card-grid">
+          <div>
+            <span class="n">20<small style="font-size:.6em">+</small></span>
+            <span class="l">років досвіду</span>
+          </div>
+          <div>
+            <span class="n">200<small style="font-size:.6em">+</small></span>
+            <span class="l">CX-проєктів</span>
+          </div>
+          <div>
+            <span class="n">500<small style="font-size:.6em">+</small></span>
+            <span class="l">досліджень</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="hero-meta">
+      <div>olena.tsysar@gmail.com</div>
+      <div>CX Maturity Model · 2026</div>
+      <div class="hero-meta-scroll">
+        <span>Прокрутіть</span>
+        <span class="line"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-photo reveal">
+        <div class="about-photo-frame"></div>
+        <div class="about-photo-badge">Хто вас веде</div>
+      </div>
+      <div>
+        <div class="about-label reveal">◆ Хто вас веде</div>
+        <h2 class="reveal d1">Олена Цисар</h2>
+        <p class="about-intro reveal d2">Міжнародна експертка зі стратегічного розвитку CX. Дослідниця · CX-менторка · Партнерка 4Service&nbsp;Group.</p>
+
+        <div class="stats reveal d3">
+          <div class="stat">
+            <div class="stat-num">20<span class="plus">+</span></div>
+            <div class="stat-label">років досвіду</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">200<span class="plus">+</span></div>
+            <div class="stat-label">CX-проєктів</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">500<span class="plus">+</span></div>
+            <div class="stat-label">досліджень</div>
+          </div>
+        </div>
+
+        <ul class="bio-list">
+          <li class="reveal d1"><strong>1000+ годин</strong> воркшопів і семінарів з CX-стратегії та трансформації</li>
+          <li class="reveal d2">Авторська методологія і курс <strong>«Клієнтський досвід як зріла система»</strong></li>
+          <li class="reveal d3">Голова методради першої укр. премії з CX — <strong>UCXE (2024–25)</strong></li>
+          <li class="reveal d4">Навчальні програми: <strong>LvBS, KSE, Deloitte, Бізнес-Школа MIM</strong></li>
+          <li class="reveal d5">Публікації: <strong>Forbes, Vector, NEW RETAIL, MMR</strong> та ін.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="problem-header">
+      <div class="eyebrow reveal">Проблема</div>
+      <h2 class="h2 reveal d1" style="margin-top:18px">Ці симптоми<br>знайомі?</h2>
+    </div>
+
+    <div class="problem-grid">
+      <div class="symptom reveal d1"><div class="symptom-num">— 01</div><div class="symptom-text">Клієнти йдуть і не повертаються</div></div>
+      <div class="symptom reveal d2"><div class="symptom-num">— 02</div><div class="symptom-text">Скарги є — змін немає</div></div>
+      <div class="symptom reveal d3"><div class="symptom-num">— 03</div><div class="symptom-text">Команда демотивована і без єдиного стандарту</div></div>
+      <div class="symptom reveal d1"><div class="symptom-num">— 04</div><div class="symptom-text">Дані є, але ні на що не впливають</div></div>
+      <div class="symptom reveal d2"><div class="symptom-num">— 05</div><div class="symptom-text">CX не пов'язаний з бізнес-цілями</div></div>
+      <div class="symptom reveal d3"><div class="symptom-num">— 06</div><div class="symptom-text">Клієнт не розуміє, за що платить</div></div>
+    </div>
+
+    <div class="problem-conclusion reveal">
+      <span>Причина одна: клієнтський досвід не побудований як система.</span>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION / 6 COMPONENTS -->
+<section class="solution" id="solution">
+  <div class="container">
+    <div class="solution-head">
+      <div>
+        <div class="eyebrow reveal">Рішення</div>
+        <h2 class="h2 reveal d1" style="margin-top:20px">CX як <em>зріла</em><br>система.</h2>
+      </div>
+      <p class="lead reveal d2">Шість компонентів, що перетворюють CX на керовану бізнес-систему з передбачуваним результатом — замість хаосу ініціатив.</p>
+    </div>
+
+    <div class="components">
+      <article class="component reveal d1">
+        <div class="component-icon">◆</div>
+        <div class="component-num">01</div>
+        <h3 class="component-title">Візія і стратегія</h3>
+        <p class="component-desc">Чітке бачення CX, KPI, зв'язок з бізнес-цілями</p>
+      </article>
+      <article class="component reveal d2">
+        <div class="component-icon">◈</div>
+        <div class="component-num">02</div>
+        <h3 class="component-title">Розуміння клієнтів</h3>
+        <p class="component-desc">Персони, карти подорожей (CJM), інсайти</p>
+      </article>
+      <article class="component reveal d3">
+        <div class="component-icon">◉</div>
+        <div class="component-num">03</div>
+        <h3 class="component-title">Персонал і культура</h3>
+        <p class="component-desc">Залученість команди, стандарти, синхронізація HR</p>
+      </article>
+      <article class="component reveal d1">
+        <div class="component-icon">◎</div>
+        <div class="component-num">04</div>
+        <h3 class="component-title">VoC та інновації</h3>
+        <p class="component-desc">Збір, аналіз і використання зворотного зв'язку</p>
+      </article>
+      <article class="component reveal d2">
+        <div class="component-icon">◇</div>
+        <div class="component-num">05</div>
+        <h3 class="component-title">Технологічна підтримка</h3>
+        <p class="component-desc">CRM, аналітика даних, автоматизація, AI</p>
+      </article>
+      <article class="component reveal d3">
+        <div class="component-icon">◊</div>
+        <div class="component-num">06</div>
+        <h3 class="component-title">CX-менеджмент</h3>
+        <p class="component-desc">Відповідальність, KPI, управління результатом</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- MATURITY MODEL -->
+<section class="maturity" id="maturity">
+  <div class="container">
+    <div class="maturity-head">
+      <div>
+        <div class="eyebrow reveal">Методологія</div>
+        <h2 class="h2 reveal d1" style="margin-top:20px"><em>CX Maturity Model</em><br>5 рівнів зрілості</h2>
+      </div>
+      <p class="lead reveal d2">Кожен продукт адаптований під конкретний рівень зрілості вашої компанії — від базового ремонту CX до повної інтеграції у культуру організації.</p>
+    </div>
+
+    <div class="levels">
+      <div class="level level-1 reveal d1">
+        <div class="level-bar">
+          <div class="level-stage">Рівень 01</div>
+          <div>
+            <div class="level-num">1</div>
+            <div class="level-desc">Базовий ремонт: фіксуємо болючі точки, усуваємо розриви</div>
+          </div>
+        </div>
+        <div class="level-label">Repair</div>
+      </div>
+      <div class="level level-2 reveal d2">
+        <div class="level-bar">
+          <div class="level-stage">Рівень 02</div>
+          <div>
+            <div class="level-num">2</div>
+            <div class="level-desc">Підіймаємо якість, впроваджуємо стандарти і KPI</div>
+          </div>
+        </div>
+        <div class="level-label">Elevate</div>
+      </div>
+      <div class="level level-3 reveal d3">
+        <div class="level-bar">
+          <div class="level-stage">Рівень 03</div>
+          <div>
+            <div class="level-num">3</div>
+            <div class="level-desc">CJM, глибокий інструментарій, зв'язок CX з фінансами</div>
+          </div>
+        </div>
+        <div class="level-label">Optimize</div>
+      </div>
+      <div class="level level-4 reveal d4">
+        <div class="level-bar">
+          <div class="level-stage">Рівень 04</div>
+          <div>
+            <div class="level-num">4</div>
+            <div class="level-desc">Трансформація CX-екосистеми, унікальний досвід, стратегічні вектори</div>
+          </div>
+        </div>
+        <div class="level-label">Differentiate</div>
+      </div>
+      <div class="level level-5 reveal d5">
+        <div class="level-bar">
+          <div class="level-stage">Рівень 05</div>
+          <div>
+            <div class="level-num">5</div>
+            <div class="level-desc">CX — частина культури. Усі рішення через призму потреб клієнта</div>
+          </div>
+        </div>
+        <div class="level-label">Embed</div>
+      </div>
+    </div>
+
+    <div class="maturity-footer reveal">Кожен продукт адаптований під конкретний рівень зрілості вашої компанії</div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="container">
+    <div class="products-header">
+      <div class="eyebrow reveal">Три продукти для вашого зростання</div>
+      <h2 class="h2 reveal d1" style="margin-top:24px"><em>Аудит</em> · <em>Стратегія</em> · <em>Впровадження</em></h2>
+    </div>
+
+    <div class="products-grid">
+      <article class="product reveal d1">
+        <div class="product-num">01</div>
+        <div class="product-title">Аудит</div>
+        <div class="product-tagline">Побачити свій бізнес очима клієнта</div>
+        <div class="product-divider"></div>
+        <p class="product-desc">Оцінка зрілості CX-системи, виявлення розривів і точок росту, пріоритизований план змін.</p>
+        <div class="product-mono">01</div>
+      </article>
+      <article class="product reveal d2">
+        <div class="product-num">02</div>
+        <div class="product-title">Стратегія</div>
+        <div class="product-tagline">Від інсайтів — до дорожньої карти</div>
+        <div class="product-divider"></div>
+        <p class="product-desc">CX-візія, стратегія і roadmap з залученням вашої команди на базі CX Maturity Model.</p>
+        <div class="product-mono">02</div>
+      </article>
+      <article class="product reveal d3">
+        <div class="product-num">03</div>
+        <div class="product-title">Впровадження</div>
+        <div class="product-tagline">Змінюємо систему — разом з командою</div>
+        <div class="product-divider"></div>
+        <p class="product-desc">Воркшопи, менторинг і Deep Learning Sessions для CX-трансформації у щоденну практику.</p>
+        <div class="product-mono">03</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS / AUDIT DETAIL -->
+<section class="process">
+  <div class="container">
+    <div class="process-head">
+      <div>
+        <div class="eyebrow reveal">01 · Аудит CX систем</div>
+        <h2 class="h2 reveal d1" style="margin-top:22px">Досліджуємо<br>наявний CX — яким<br>він є насправді.</h2>
+      </div>
+      <p class="lead reveal d2">Повне занурення у ваш клієнтський досвід: від оцінки документації та стандартів — до глибинних інтерв'ю з клієнтами та персоналом.</p>
+    </div>
+
+    <div class="process-grid">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="process-panel reveal">
+          <div class="panel-label">◆ Для кого</div>
+          <p class="panel-text">Компанії, що хочуть зрозуміти реальний стан CX, виявити розриви й отримати пріоритизований план змін. Підходить для будь-якого рівня зрілості.</p>
+        </div>
+        <div class="process-panel reveal d1">
+          <div class="panel-label">◆ Результат</div>
+          <ul class="panel-list">
+            <li>Оцінка зрілості CX за методологією CX Maturity Model</li>
+            <li>Перелік розривів, болючих точок і точок росту</li>
+            <li>Пріоритизовані рекомендації та план змін</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="process-panel blue reveal d2">
+        <div class="panel-label">◆ Як це працює</div>
+        <ol class="steps">
+          <li class="step"><span class="step-n">1</span><span class="step-t">Установча зустріч — цілі, команда залучення</span></li>
+          <li class="step"><span class="step-n">2</span><span class="step-t">Аудит документації (процеси, стандарти, KPI)</span></li>
+          <li class="step"><span class="step-n">3</span><span class="step-t">Тестування за CX Maturity Model</span></li>
+          <li class="step"><span class="step-n">4</span><span class="step-t">Глибинні інтерв'ю з клієнтами і персоналом</span></li>
+          <li class="step"><span class="step-n">5</span><span class="step-t">Презентація результатів і план змін</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMATS -->
+<section class="formats">
+  <div class="container">
+    <div class="formats-head">
+      <div class="eyebrow reveal">03 · Впровадження</div>
+      <h2 class="h2 reveal d1" style="margin-top:22px">Три формати<br>роботи з вашою командою</h2>
+      <p class="lead reveal d2" style="margin-top:22px">Обирайте один формат або поєднуйте їх — залежно від задачі і рівня зрілості команди.</p>
+    </div>
+
+    <div class="format-grid">
+      <article class="format reveal d1">
+        <h3>Воркшопи</h3>
+        <div class="format-sub">Динамічна групова робота</div>
+        <div class="format-divider"></div>
+        <p class="format-desc">Інтерактивні сесії для команди з практичними вправами. Від CX-візії до стандартів, CJM і VoC.</p>
+        <div class="format-tags">Kick-off · 3-год воркшоп · Debrief · Retro</div>
+      </article>
+      <article class="format reveal d2">
+        <h3>Менторинг</h3>
+        <div class="format-sub">Регулярна підтримка</div>
+        <div class="format-divider"></div>
+        <p class="format-desc">Спільна робота над реальними задачами бізнесу. Фокус, системність, корекція дій і підтримка змін.</p>
+        <div class="format-tags">Зустрічі 1.5 год · Кейси · Наступні кроки</div>
+      </article>
+      <article class="format reveal d3">
+        <h3>Deep Learning</h3>
+        <div class="format-sub">Поглиблені навчальні сесії</div>
+        <div class="format-divider"></div>
+        <p class="format-desc">Знання + реальні кейси + практичні вправи. Команда починає використовувати інструменти CX одразу.</p>
+        <div class="format-tags">CJM · VoC · Service Blueprint · Персони</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- WORKSHOPS 2026 -->
+<section class="workshops">
+  <div class="container">
+    <div class="workshops-head">
+      <div class="eyebrow reveal">Спеціальні продукти</div>
+      <h2 class="reveal d1" style="margin-top:22px">Найактуальніші<br>воркшопи <em style="color:var(--orange);font-style:normal">2026</em></h2>
+    </div>
+
+    <div class="workshop-grid">
+      <article class="workshop reveal d1">
+        <span class="workshop-tag">2026</span>
+        <h3>Сервіс із взаємоповагою</h3>
+        <div class="workshop-sub">Або що робити з токсичністю клієнтів</div>
+        <ul class="workshop-items">
+          <li>Токсичність як системна проблема CX і EX</li>
+          <li>Робота з різними типами поведінки клієнтів</li>
+          <li>Формування нових норм взаємодії</li>
+          <li>Zero-tolerance policy і захист команди</li>
+          <li>Конкретні інструменти для впровадження</li>
+        </ul>
+      </article>
+      <article class="workshop reveal d2">
+        <span class="workshop-tag">2026</span>
+        <h3>Людяність і інклюзивність у сервісі</h3>
+        <div class="workshop-sub">Клієнт — це людина, а не «середній користувач»</div>
+        <ul class="workshop-items">
+          <li>Бар'єри у сервісі: фізичні, інформаційні, ментальні</li>
+          <li>Стереотипи і упередження в обслуговуванні</li>
+          <li>Правила поважної комунікації без жалості</li>
+          <li>Дії персоналу в складних і напружених ситуаціях</li>
+          <li>Практичні зміни в поведінці і сервісних процесах</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="pricing-grid">
+      <div>
+        <div class="eyebrow reveal">Вартість</div>
+        <h2 class="reveal d1" style="margin-top:22px">Ціни — <em>за запитом</em></h2>
+        <p class="pricing-lead reveal d2">Кожен проєкт унікальний. Вартість формується після розуміння вашого контексту, цілей, обсягу роботи і рівня зрілості CX-системи.</p>
+
+        <div class="price-boxes reveal d3">
+          <div class="price-box">
+            <h4>Аудит CX</h4>
+            <p>Індивідуально під вашу задачу</p>
+          </div>
+          <div class="price-box">
+            <h4>Стратегія CX</h4>
+            <p>Залежно від обсягу і команди</p>
+          </div>
+          <div class="price-box">
+            <h4>Впровадження</h4>
+            <p>Воркшоп, менторинг або пакетна програма</p>
+          </div>
+        </div>
+
+        <a href="mailto:olena.tsysar@gmail.com" class="pricing-cta reveal d4">Запишіться на зустріч <span class="arrow">→</span></a>
+      </div>
+
+      <aside class="pricing-side reveal d2">
+        <h3>Перший крок — розмова</h3>
+        <p>30 хвилин, щоб зрозуміти ваш контекст і запропонувати правильну точку входу. Без зобов'язань, лише чесна оцінка поточного стану.</p>
+        <div class="pricing-contact">
+          <a href="mailto:olena.tsysar@gmail.com">olena.tsysar@gmail.com →</a>
+          <span style="color:var(--ink-mute);font-size:13px;letter-spacing:.08em">Олена Цисар · Ukraine · Austria</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="container">
+    <div class="final-inner">
+      <div class="eyebrow reveal">Наостанок</div>
+      <h2 class="reveal d1" style="margin-top:24px">Збирайте свої<br>мозаїки<span class="period">.</span></h2>
+      <p class="final-sub reveal d2">Клієнтський досвід як зріла система — <strong>це не проєкт</strong>. Це спосіб мислення.</p>
+      <div class="final-contact reveal d3">
+        <a href="mailto:olena.tsysar@gmail.com" class="final-email">olena.tsysar@gmail.com</a>
+        <span style="color:var(--ink-mute);font-size:14px;letter-spacing:.1em">Олена Цисар · CX Maturity Model · 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container foot">
+    <div class="foot-brand">
+      <span class="brand-mark">OT</span>
+      <span>Олена Цисар</span>
+    </div>
+    <div class="foot-meta">© 2026 · Ukraine · Austria · All rights reserved</div>
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:.12, rootMargin:'0px 0px -50px 0px'});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Hero product pills interaction
+  const pills = document.querySelectorAll('.hero-products .pill');
+  pills.forEach(p => p.addEventListener('click', () => {
+    pills.forEach(q => q.classList.remove('active'));
+    p.classList.add('active');
+  }));
+
+  // Smooth scroll handled by CSS; add active nav highlighting
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    const pos = window.scrollY + 120;
+    sections.forEach(sec => {
+      if(sec.offsetTop <= pos && sec.offsetTop + sec.offsetHeight > pos){
+        navLinks.forEach(a => {
+          a.style.color = a.getAttribute('href') === '#' + sec.id ? 'var(--ink)' : '';
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
