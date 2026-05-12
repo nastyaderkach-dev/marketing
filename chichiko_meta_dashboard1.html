@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta Ads Аудит — Чічіко</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F7F6F3; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  #root { min-height: 100vh; }
+  input:focus { outline: none; }
+</style>
+</head>
+<body>
+<div id="root"><div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#888;font-size:13px;">Завантаження дашборду…</div></div>
+
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState } = React;
+const {
+  LineChart, Line, BarChart, Bar, ComposedChart,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell
+} = Recharts;
+
+const INITIAL = [
+  { id:1, month:'Жовтень',  spend:186.80, messages:54, cpmSales:7.05, cpmTraffic:null,  reachSales:14219, profileVisits:0,    spendSales:186.80, spendTraffic:0 },
+  { id:2, month:'Листопад', spend:243.52, messages:41, cpmSales:6.23, cpmTraffic:2.35,  reachSales:7730,  profileVisits:462,  spendSales:196.43, spendTraffic:47.09 },
+  { id:3, month:'Грудень',  spend:331.12, messages:56, cpmSales:3.46, cpmTraffic:1.97,  reachSales:39710, profileVisits:294,  spendSales:292.25, spendTraffic:38.87 },
+  { id:4, month:'Січень',   spend:393.05, messages:45, cpmSales:2.63, cpmTraffic:1.40,  reachSales:56973, profileVisits:1017, spendSales:295.19, spendTraffic:97.86 },
+  { id:5, month:'Лютий',   spend:403.05, messages:53, cpmSales:2.46, cpmTraffic:1.56,  reachSales:58260, profileVisits:1494, spendSales:298.63, spendTraffic:104.42 },
+  { id:6, month:'Березень', spend:433.38, messages:62, cpmSales:3.82, cpmTraffic:1.69,  reachSales:24937, profileVisits:3407, spendSales:225.05, spendTraffic:208.33 },
+  { id:7, month:'Квітень',  spend:381.03, messages:43, cpmSales:4.05, cpmTraffic:1.22,  reachSales:21437, profileVisits:3690, spendSales:176.38, spendTraffic:204.65 },
+];
+
+const EMPTY = { month:'', spend:'', messages:'', cpmSales:'', cpmTraffic:'', reachSales:'', profileVisits:'', spendSales:'', spendTraffic:'' };
+const getPhase = (cpm) => cpm >= 5 ? 'chaos' : cpm <= 3.5 ? 'ok' : 'warn';
+const PHASE = {
+  chaos: ['Хаос',      '#FAECE7','#993C1D'],
+  ok:    ['Ефективно', '#EAF3DE','#3B6D11'],
+  warn:  ['Деградація','#FAEEDA','#854F0B'],
+};
+const cpmCol = (v) => v >= 5 ? '#E24B4A' : v >= 3.5 ? '#BA7517' : '#3B6D11';
+const tt = { fontFamily:'inherit', fontSize:11, background:'#1a1a1a', border:'none', borderRadius:6, color:'#f5f5f5', padding:'6px 10px' };
+
+function Dashboard() {
+  const [data, setData]         = useState(INITIAL);
+  const [editing, setEditing]   = useState(null);
+  const [editVal, setEditVal]   = useState('');
+  const [showAdd, setShowAdd]   = useState(false);
+  const [newRow, setNewRow]     = useState(EMPTY);
+  const [tab, setTab]           = useState('overview');
+
+  const totalSpend  = data.reduce((s,d) => s + d.spend, 0);
+  const totalMsg    = data.reduce((s,d) => s + d.messages, 0);
+  const totalVisits = data.reduce((s,d) => s + d.profileVisits, 0);
+  const totalSales  = data.reduce((s,d) => s + d.spendSales, 0);
+  const avgCPA      = totalMsg > 0 ? totalSales / totalMsg : 0;
+  const maxCPM      = Math.max(...data.map(d => d.cpmSales).filter(Boolean));
+  const minTrCPM    = Math.min(...data.map(d => d.cpmTraffic).filter(Boolean));
+
+  const startEdit = (id, field, val) => { setEditing({id,field}); setEditVal(String(val ?? '')); };
+  const commit = () => {
+    if (!editing) return;
+    const n = parseFloat(editVal);
+    setData(prev => prev.map(d => d.id === editing.id ? {...d, [editing.field]: isNaN(n) ? editVal : n} : d));
+    setEditing(null);
+  };
+
+  const addRow = () => {
+    setData(prev => [...prev, {
+      id: Date.now(), month: newRow.month || 'Новий місяць',
+      spend:+newRow.spend||0, messages:+newRow.messages||0, cpmSales:+newRow.cpmSales||0,
+      cpmTraffic:+newRow.cpmTraffic||null, reachSales:+newRow.reachSales||0,
+      profileVisits:+newRow.profileVisits||0, spendSales:+newRow.spendSales||0, spendTraffic:+newRow.spendTraffic||0,
+    }]);
+    setShowAdd(false); setNewRow(EMPTY);
+  };
+
+  const delRow = (id) => setData(prev => prev.filter(d => d.id !== id));
+
+  const cell = (id, field, val) => {
+    const active = editing?.id === id && editing?.field === field;
+    const disp = typeof val === 'number' ? (Number.isInteger(val) ? val.toLocaleString('uk') : val.toFixed(2)) : (val ?? '—');
+    if (active) return (
+      <input value={editVal} onChange={e=>setEditVal(e.target.value)}
+        onBlur={commit} onKeyDown={e=>{ if(e.key==='Enter') commit(); if(e.key==='Escape') setEditing(null); }}
+        autoFocus style={{width:'100%',border:'none',borderBottom:'1.5px solid #378ADD',background:'transparent',fontSize:'inherit',fontFamily:'inherit',color:'inherit',outline:'none',padding:'0 1px'}} />
+    );
+    return <span onClick={()=>startEdit(id,field,val)} title="Клікни щоб редагувати"
+      style={{cursor:'text',borderBottom:'1px dashed rgba(0,0,0,0.13)',paddingBottom:1}}>{disp}</span>;
+  };
+
+  const chartData = data.map(d => ({
+    name: d.month.slice(0,6),
+    cpmSales: d.cpmSales, cpmTraffic: d.cpmTraffic,
+    messages: d.messages,
+    cpa: d.messages > 0 ? +((d.spendSales / d.messages).toFixed(2)) : 0,
+    reach: d.reachSales, profileVisits: d.profileVisits,
+    spendSales: +d.spendSales.toFixed(0), spendTraffic: +d.spendTraffic.toFixed(0),
+  }));
+  const rcColors = chartData.map(d => d.cpmSales >= 5 ? '#F09595' : d.cpmSales >= 3.5 ? '#FAC775' : '#5DCAA5');
+
+  /* ── layout helpers ── */
+  const P = '16px';
+  const card = { background:'#fff', border:'0.5px solid #e5e5e5', borderRadius:8 };
+
+  return (
+    <div style={{background:'#F7F6F3', padding:P, minHeight:'100vh', color:'#1a1a1a'}}>
+
+      {/* header */}
+      <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:8, marginBottom:16}}>
+        <div>
+          <h1 style={{fontSize:18, fontWeight:700, letterSpacing:'-0.4px', margin:0}}>Meta Ads Аудит — Чічіко</h1>
+          <p style={{fontSize:11, color:'#888', marginTop:3}}>Жовтень 2024 — Квітень 2025 · Клікни значення в таблиці щоб редагувати</p>
+        </div>
+        <div style={{display:'flex', gap:4}}>
+          {[['overview','Огляд'],['table','Таблиця']].map(([k,l]) => (
+            <button key={k} onClick={()=>setTab(k)} style={{fontSize:11,fontWeight:600,padding:'5px 12px',borderRadius:5,border:`0.5px solid ${tab===k?'#1a1a1a':'#ddd'}`,cursor:'pointer',background:tab===k?'#1a1a1a':'transparent',color:tab===k?'#fff':'#666'}}>{l}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* KPI cards */}
+      <div style={{display:'grid', gridTemplateColumns:'repeat(6,1fr)', gap:8, marginBottom:16}}>
+        {[
+          ['Загальний spend',  '$'+totalSpend.toFixed(0), data.length+' місяців',    '#378ADD'],
+          ['DM повідомлень',   totalMsg,                  'сер. CAC $'+avgCPA.toFixed(2), '#E24B4A'],
+          ['Profile visits',   totalVisits.toLocaleString('uk'), 'від $0.05–0.13',  '#3B6D11'],
+          ['Макс CPM sales',   '$'+maxCPM.toFixed(2),    'жовтень 2024',            '#E24B4A'],
+          ['Мін CPM traffic',  '$'+minTrCPM.toFixed(2),  'трафік кампанія',         '#3B6D11'],
+          ['ROAS',             '—',                       'не відстежується',        '#aaa'],
+        ].map(([label,val,sub,acc]) => (
+          <div key={label} style={{...card, padding:'9px 12px', borderTop:`3px solid ${acc}`}}>
+            <p style={{fontSize:9,fontWeight:600,color:'#aaa',textTransform:'uppercase',letterSpacing:'.07em',margin:'0 0 4px'}}>{label}</p>
+            <p style={{fontSize:20,fontWeight:700,margin:0,color: acc==='#aaa'?'#E24B4A':acc}}>{val}</p>
+            <p style={{fontSize:9,color:'#aaa',margin:'2px 0 0'}}>{sub}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* charts — overview tab */}
+      {tab === 'overview' && (
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16}}>
+
+          <div style={{...card, padding:'10px 12px'}}>
+            <p style={{fontSize:11,fontWeight:600,color:'#555',margin:'0 0 6px'}}>CPM продаючих кампаній ($)</p>
+            <div style={{display:'flex',gap:10,marginBottom:6,flexWrap:'wrap'}}>
+              {[['#E24B4A','Продажі/DM'],['#378ADD','Трафік (пунктир)']].map(([c,l])=>(
+                <span key={l} style={{display:'flex',alignItems:'center',gap:4,fontSize:9,color:'#777'}}>
+                  <span style={{width:8,height:8,borderRadius:2,background:c,display:'inline-block'}}></span>{l}
+                </span>
+              ))}
+            </div>
+            <ResponsiveContainer width="100%" height={145}>
+              <LineChart data={chartData} margin={{top:4,right:8,bottom:0,left:-12}}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="name" tick={{fontSize:9}} />
+                <YAxis tick={{fontSize:9}} tickFormatter={v=>'$'+v} />
+                <Tooltip contentStyle={tt} formatter={(v,n)=>['$'+v, n==='cpmSales'?'CPM Продажі':'CPM Трафік']} />
+                <Line type="monotone" dataKey="cpmSales" stroke="#E24B4A" strokeWidth={2.5} dot={{r:4,fill:'#E24B4A',strokeWidth:0}} />
+                <Line type="monotone" dataKey="cpmTraffic" stroke="#378ADD" strokeWidth={2} strokeDasharray="5 3" dot={{r:3,fill:'#378ADD',strokeWidth:0}} connectNulls={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div style={{...card, padding:'10px 12px'}}>
+            <p style={{fontSize:11,fontWeight:600,color:'#555',margin:'0 0 6px'}}>DM повідомлення та CPA ($)</p>
+            <div style={{display:'flex',gap:10,marginBottom:6,flexWrap:'wrap'}}>
+              {[['#7F77DD','Повідомлень (бар)'],['#E24B4A','CPA $ (лінія)']].map(([c,l])=>(
+                <span key={l} style={{display:'flex',alignItems:'center',gap:4,fontSize:9,color:'#777'}}>
+                  <span style={{width:8,height:8,borderRadius:2,background:c,display:'inline-block'}}></span>{l}
+                </span>
+              ))}
+            </div>
+            <ResponsiveContainer width="100%" height={145}>
+              <ComposedChart data={chartData} margin={{top:4,right:8,bottom:0,left:-12}}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="name" tick={{fontSize:9}} />
+                <YAxis yAxisId="l" tick={{fontSize:9}} />
+                <YAxis yAxisId="r" orientation="right" tick={{fontSize:9}} tickFormatter={v=>'$'+v} domain={[0,9]} />
+                <Tooltip contentStyle={tt} />
+                <Bar yAxisId="l" dataKey="messages" fill="#7F77DD" radius={[3,3,0,0]} name="Повідомлень" />
+                <Line yAxisId="r" type="monotone" dataKey="cpa" stroke="#E24B4A" strokeWidth={2} strokeDasharray="5 3" dot={{r:4,fill:'#E24B4A',strokeWidth:0}} name="CPA $" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div style={{...card, padding:'10px 12px'}}>
+            <p style={{fontSize:11,fontWeight:600,color:'#555',margin:'0 0 6px'}}>Reach продаючих кампаній</p>
+            <div style={{display:'flex',gap:10,marginBottom:6,flexWrap:'wrap'}}>
+              {[['#5DCAA5','Ефективно (CPM≤3.5)'],['#FAC775','Деградація'],['#F09595','Хаос (CPM≥5)']].map(([c,l])=>(
+                <span key={l} style={{display:'flex',alignItems:'center',gap:4,fontSize:9,color:'#777'}}>
+                  <span style={{width:8,height:8,borderRadius:2,background:c,display:'inline-block'}}></span>{l}
+                </span>
+              ))}
+            </div>
+            <ResponsiveContainer width="100%" height={145}>
+              <BarChart data={chartData} margin={{top:4,right:8,bottom:0,left:-12}}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="name" tick={{fontSize:9}} />
+                <YAxis tick={{fontSize:9}} tickFormatter={v=>(v/1000).toFixed(0)+'K'} />
+                <Tooltip contentStyle={tt} formatter={v=>[v.toLocaleString('uk')+' людей','Reach']} />
+                <Bar dataKey="reach" radius={[3,3,0,0]}>
+                  {chartData.map((_,i)=><Cell key={i} fill={rcColors[i]} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div style={{...card, padding:'10px 12px'}}>
+            <p style={{fontSize:11,fontWeight:600,color:'#555',margin:'0 0 6px'}}>Spend: Продажі vs Трафік ($)</p>
+            <div style={{display:'flex',gap:10,marginBottom:6,flexWrap:'wrap'}}>
+              {[['#E24B4A','Продажі/DM'],['#378ADD','Трафік + інше']].map(([c,l])=>(
+                <span key={l} style={{display:'flex',alignItems:'center',gap:4,fontSize:9,color:'#777'}}>
+                  <span style={{width:8,height:8,borderRadius:2,background:c,display:'inline-block'}}></span>{l}
+                </span>
+              ))}
+            </div>
+            <ResponsiveContainer width="100%" height={145}>
+              <BarChart data={chartData} margin={{top:4,right:8,bottom:0,left:-12}}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="name" tick={{fontSize:9}} />
+                <YAxis tick={{fontSize:9}} tickFormatter={v=>'$'+v} />
+                <Tooltip contentStyle={tt} formatter={(v,n)=>['$'+v, n==='spendSales'?'Продажі':'Трафік']} />
+                <Bar dataKey="spendSales" stackId="a" fill="#E24B4A" />
+                <Bar dataKey="spendTraffic" stackId="a" fill="#378ADD" radius={[3,3,0,0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* charts — table tab */}
+      {tab === 'table' && (
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16}}>
+          <div style={{...card, padding:'10px 12px'}}>
+            <p style={{fontSize:11,fontWeight:600,color:'#555',margin:'0 0 6px'}}>Profile visits vs DM повідомлення</p>
+            <ResponsiveContainer width="100%" height={145}>
+              <ComposedChart data={chartData} margin={{top:4,right:8,bottom:0,left:-12}}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="name" tick={{fontSize:9}} />
+                <YAxis yAxisId="l" tick={{fontSize:9}} tickFormatter={v=>v>999?(v/1000).toFixed(0)+'K':v} />
+                <YAxis yAxisId="r" orientation="right" tick={{fontSize:9}} />
+                <Tooltip contentStyle={tt} />
+                <Bar yAxisId="l" dataKey="profileVisits" fill="#5DCAA5" radius={[3,3,0,0]} name="Profile visits" />
+                <Line yAxisId="r" type="monotone" dataKey="messages" stroke="#7F77DD" strokeWidth={2} dot={{r:4,fill:'#7F77DD',strokeWidth:0}} name="DM msg" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+          <div style={{...card, padding:'10px 12px'}}>
+            <p style={{fontSize:11,fontWeight:600,color:'#555',margin:'0 0 6px'}}>Загальний spend по місяцях ($)</p>
+            <ResponsiveContainer width="100%" height={145}>
+              <BarChart data={chartData} margin={{top:4,right:8,bottom:0,left:-12}}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="name" tick={{fontSize:9}} />
+                <YAxis tick={{fontSize:9}} tickFormatter={v=>'$'+v} />
+                <Tooltip contentStyle={tt} formatter={v=>['$'+v,'Spend']} />
+                <Bar dataKey="spendSales" stackId="a" fill="#E24B4A" />
+                <Bar dataKey="spendTraffic" stackId="a" fill="#378ADD" radius={[3,3,0,0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* editable table */}
+      <p style={{fontSize:9,fontWeight:700,color:'#aaa',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:8}}>Дані по місяцях — клікни клітинку щоб редагувати</p>
+      <div style={{...card, overflow:'auto', marginBottom:10}}>
+        <table style={{width:'100%',borderCollapse:'collapse',fontSize:11}}>
+          <thead>
+            <tr>
+              {['Місяць','Spend $','DM msg','CPA $','CPM sales $','CPM traffic $','Reach sales','Profile visits','Spend sales $','Spend traffic $','Фаза',''].map(h=>(
+                <th key={h} style={{fontSize:9,fontWeight:600,color:'#999',textAlign:'left',padding:'7px 9px',borderBottom:'0.5px solid #eee',background:'#FAFAF8',textTransform:'uppercase',letterSpacing:'.05em',whiteSpace:'nowrap'}}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map(d => {
+              const cpa = d.messages > 0 ? d.spendSales / d.messages : null;
+              const [pl,pbg,pc] = PHASE[getPhase(d.cpmSales)];
+              const td = {padding:'7px 9px', borderBottom:'0.5px solid #f2f2f2', whiteSpace:'nowrap'};
+              return (
+                <tr key={d.id} onMouseEnter={e=>e.currentTarget.style.background='#F9F9F7'} onMouseLeave={e=>e.currentTarget.style.background=''}>
+                  <td style={td}>{cell(d.id,'month',d.month)}</td>
+                  <td style={td}>{cell(d.id,'spend',d.spend)}</td>
+                  <td style={td}><b style={{color:d.messages>=55?'#3B6D11':d.messages<=44?'#E24B4A':'#BA7517'}}>{cell(d.id,'messages',d.messages)}</b></td>
+                  <td style={td}><span style={{color:cpa&&cpa>5.5?'#E24B4A':'#444'}}>{cpa?'$'+cpa.toFixed(2):'—'}</span></td>
+                  <td style={td}><b style={{color:cpmCol(d.cpmSales)}}>{cell(d.id,'cpmSales',d.cpmSales)}</b></td>
+                  <td style={td}>{cell(d.id,'cpmTraffic',d.cpmTraffic)}</td>
+                  <td style={td}>{cell(d.id,'reachSales',d.reachSales)}</td>
+                  <td style={td}>{cell(d.id,'profileVisits',d.profileVisits)}</td>
+                  <td style={td}>{cell(d.id,'spendSales',d.spendSales)}</td>
+                  <td style={td}>{cell(d.id,'spendTraffic',d.spendTraffic)}</td>
+                  <td style={td}><span style={{display:'inline-block',fontSize:8,padding:'2px 5px',borderRadius:3,fontWeight:600,background:pbg,color:pc}}>{pl}</span></td>
+                  <td style={td}><span onClick={()=>delRow(d.id)} title="Видалити" style={{cursor:'pointer',color:'#ddd',fontSize:13,fontWeight:700,userSelect:'none'}} onMouseEnter={e=>e.target.style.color='#E24B4A'} onMouseLeave={e=>e.target.style.color='#ddd'}>✕</span></td>
+                </tr>
+              );
+            })}
+            <tr style={{background:'#F3F3F0', fontWeight:700}}>
+              {['РАЗОМ', '$'+totalSpend.toFixed(2), totalMsg, '$'+avgCPA.toFixed(2), '—', '—',
+                data.reduce((s,d)=>s+d.reachSales,0).toLocaleString('uk'),
+                totalVisits.toLocaleString('uk'), '$'+totalSales.toFixed(2),
+                '$'+data.reduce((s,d)=>s+d.spendTraffic,0).toFixed(2), '—', ''
+              ].map((v,i)=>(
+                <td key={i} style={{padding:'7px 9px', borderBottom:'0.5px solid #eee'}}>{v}</td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* add row */}
+      {!showAdd
+        ? <button onClick={()=>setShowAdd(true)} style={{fontSize:11,fontWeight:600,padding:'7px 14px',borderRadius:6,border:'none',cursor:'pointer',background:'#1a1a1a',color:'#fff',marginBottom:8}}>+ Додати місяць</button>
+        : <div style={{...card, padding:14, marginBottom:10}}>
+            <p style={{fontSize:9,fontWeight:700,color:'#aaa',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:10}}>Новий місяць</p>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginBottom:10}}>
+              {[
+                ['month','Назва місяця','text'],
+                ['spend','Загальний spend $','number'],
+                ['messages','DM повідомлень','number'],
+                ['cpmSales','CPM sales $','number'],
+                ['cpmTraffic','CPM traffic $','number'],
+                ['reachSales','Reach (sales)','number'],
+                ['profileVisits','Profile visits','number'],
+                ['spendSales','Spend sales $','number'],
+                ['spendTraffic','Spend traffic $','number'],
+              ].map(([f,l,t])=>(
+                <div key={f}>
+                  <label style={{fontSize:9,color:'#888',display:'block',margin:'0 0 3px',textTransform:'uppercase',letterSpacing:'.05em'}}>{l}</label>
+                  <input type={t} value={newRow[f]} onChange={e=>setNewRow(p=>({...p,[f]:e.target.value}))}
+                    style={{border:'0.5px solid #ddd',borderRadius:5,padding:'5px 8px',fontSize:11,width:'100%',fontFamily:'inherit'}} />
+                </div>
+              ))}
+            </div>
+            <div style={{display:'flex',gap:8}}>
+              <button onClick={addRow} style={{fontSize:11,fontWeight:600,padding:'7px 14px',borderRadius:6,border:'none',cursor:'pointer',background:'#1a1a1a',color:'#fff'}}>Додати</button>
+              <button onClick={()=>{setShowAdd(false);setNewRow(EMPTY);}} style={{fontSize:11,fontWeight:600,padding:'7px 14px',borderRadius:6,border:'0.5px solid #ddd',cursor:'pointer',background:'transparent',color:'#666'}}>Скасувати</button>
+            </div>
+          </div>
+      }
+
+      <p style={{fontSize:9,color:'#bbb',marginTop:4}}>
+        CPA розраховується автоматично (Spend sales ÷ Messages). Фаза: CPM ≥ 5 = Хаос · CPM ≤ 3.5 = Ефективно · між = Деградація.
+        Клікни клітинку таблиці для редагування, Enter або клік за межами — зберегти.
+      </p>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Dashboard />);
+</script>
+</body>
+</html>
