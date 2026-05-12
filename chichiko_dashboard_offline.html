@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta Ads Аудит — Чічіко</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F7F6F3;color:#1a1a1a;padding:16px}
+.header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+h1{font-size:18px;font-weight:700;letter-spacing:-.4px}
+.sub{font-size:11px;color:#888;margin-top:3px}
+.tabs{display:flex;gap:4px}
+.tab{font-size:11px;font-weight:600;padding:5px 12px;border-radius:5px;border:.5px solid #ddd;cursor:pointer;background:transparent;color:#666;font-family:inherit}
+.tab.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.kg{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px}
+.kc{background:#fff;border:.5px solid #e5e5e5;border-radius:8px;padding:9px 12px}
+.kl{font-size:9px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.kv{font-size:20px;font-weight:700}
+.ks{font-size:9px;color:#aaa;margin-top:2px}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.cc{background:#fff;border:.5px solid #e5e5e5;border-radius:8px;padding:10px 14px}
+.ct{font-size:11px;font-weight:600;color:#555;margin-bottom:6px}
+.cw{width:100%;height:150px;display:block}
+.sl{font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.tw{background:#fff;border:.5px solid #e5e5e5;border-radius:8px;overflow:auto;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{font-size:9px;font-weight:600;color:#999;text-align:left;padding:7px 9px;border-bottom:.5px solid #eee;background:#FAFAF8;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+td{padding:7px 9px;border-bottom:.5px solid #f2f2f2;white-space:nowrap;vertical-align:middle}
+tfoot td{background:#F3F3F0;font-weight:700;border-bottom:.5px solid #eee}
+tbody tr:hover td{background:#F9F9F7}
+tfoot tr:hover td{background:#F3F3F0}
+.cv{cursor:text;border-bottom:1px dashed rgba(0,0,0,0.14);padding-bottom:1px}
+.ci{width:100%;border:none;border-bottom:1.5px solid #378ADD;background:transparent;font-size:11px;font-family:inherit;color:inherit;outline:none;padding:0 1px}
+.bdg{display:inline-block;font-size:8px;padding:2px 5px;border-radius:3px;font-weight:600}
+.dx{cursor:pointer;color:#ddd;font-size:13px;font-weight:700;user-select:none}
+.dx:hover{color:#E24B4A}
+.ab{font-size:11px;font-weight:600;padding:7px 14px;border-radius:6px;border:none;cursor:pointer;background:#1a1a1a;color:#fff;font-family:inherit;margin-bottom:8px}
+.xb{font-size:11px;font-weight:600;padding:7px 14px;border-radius:6px;border:.5px solid #ddd;cursor:pointer;background:transparent;color:#666;font-family:inherit}
+.fw{background:#fff;border:.5px solid #e5e5e5;border-radius:8px;padding:14px;margin-bottom:10px}
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.fl{font-size:9px;color:#888;display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
+.fi{border:.5px solid #ddd;border-radius:5px;padding:5px 8px;font-size:11px;width:100%;font-family:inherit}
+.note{font-size:9px;color:#bbb;margin-top:6px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ══════════════════════════════════
+   DATA
+══════════════════════════════════ */
+var D=[
+  {id:1,month:'Жовтень', spend:186.80,msg:54,cpmS:7.05,cpmT:null, reach:14219,vis:0,   ss:186.80,st:0},
+  {id:2,month:'Листопад',spend:243.52,msg:41,cpmS:6.23,cpmT:2.35, reach:7730, vis:462, ss:196.43,st:47.09},
+  {id:3,month:'Грудень', spend:331.12,msg:56,cpmS:3.46,cpmT:1.97, reach:39710,vis:294, ss:292.25,st:38.87},
+  {id:4,month:'Січень',  spend:393.05,msg:45,cpmS:2.63,cpmT:1.40, reach:56973,vis:1017,ss:295.19,st:97.86},
+  {id:5,month:'Лютий',  spend:403.05,msg:53,cpmS:2.46,cpmT:1.56, reach:58260,vis:1494,ss:298.63,st:104.42},
+  {id:6,month:'Березень',spend:433.38,msg:62,cpmS:3.82,cpmT:1.69, reach:24937,vis:3407,ss:225.05,st:208.33},
+  {id:7,month:'Квітень', spend:381.03,msg:43,cpmS:4.05,cpmT:1.22, reach:21437,vis:3690,ss:176.38,st:204.65},
+];
+
+/* ══════════════════════════════════
+   STATE
+══════════════════════════════════ */
+var tab='overview', editing=null, showAdd=false;
+
+/* ══════════════════════════════════
+   HELPERS
+══════════════════════════════════ */
+function S(f){return D.reduce(function(a,d){return a+(+d[f]||0);},0);}
+function ph(v){return v>=5?'chaos':v<=3.5?'ok':'warn';}
+var PH={chaos:['Хаос','#FAECE7','#993C1D'],ok:['Ефективно','#EAF3DE','#3B6D11'],warn:['Деградація','#FAEEDA','#854F0B']};
+function cc(v){return v>=5?'#E24B4A':v>=3.5?'#BA7517':'#3B6D11';}
+function fn(v){
+  if(v===null||v===undefined)return '—';
+  if(typeof v==='number')return Number.isInteger(v)?v.toLocaleString():v.toFixed(2);
+  return v;
+}
+function nm(v){
+  if(!v||v<=0)return 10;
+  var e=Math.pow(10,Math.floor(Math.log(v)/Math.LN10));
+  return Math.ceil(v*1.2/e)*e;
+}
+
+/* ══════════════════════════════════
+   SVG CHART ENGINE
+══════════════════════════════════ */
+function chart(cfg){
+  var W=400,H=155,ML=48,MR=cfg.r2?48:10,MT=10,MB=26;
+  var CW=W-ML-MR, CH=H-MT-MB;
+  var n=cfg.lbs.length;
+  var o=[];
+
+  // gather ranges
+  var lvals=[],rvals=[];
+  cfg.sets.forEach(function(s){
+    (s.ax==='r'?rvals:lvals).push.apply(s.ax==='r'?rvals:lvals,
+      s.data.filter(function(v){return v!=null;}));
+  });
+  if(cfg.stacked){
+    // for stacked, max = sum of all bar values per position
+    var sums=new Array(n).fill(0);
+    cfg.sets.filter(function(s){return s.t==='bar'||!s.t;}).forEach(function(s){
+      s.data.forEach(function(v,i){sums[i]+=(v||0);});
+    });
+    lvals=[Math.max.apply(null,sums)];
+  }
+  var lmax=lvals.length?nm(Math.max.apply(null,lvals)):10;
+  var rmax=rvals.length?nm(Math.max.apply(null,rvals)):10;
+
+  function yL(v){return MT+CH-((v||0)/lmax)*CH;}
+  function yR(v){return MT+CH-((v||0)/rmax)*CH;}
+  function xB(i){return ML+(i+0.5)*(CW/n);}  // bar center
+  function xL(i){return n>1?ML+i*(CW/(n-1)):ML+CW/2;}  // line point
+
+  o.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" class="cw">');
+
+  // grid + left Y labels
+  var gt=4;
+  for(var g=0;g<=gt;g++){
+    var gv=lmax*g/gt, gy=yL(gv);
+    o.push('<line x1="'+ML+'" y1="'+gy.toFixed(1)+'" x2="'+(W-MR)+'" y2="'+gy.toFixed(1)+'" stroke="rgba(0,0,0,0.05)"/>');
+    var gl=cfg.yf?cfg.yf(gv):gv.toFixed(0);
+    o.push('<text x="'+(ML-4)+'" y="'+(gy+3.5).toFixed(1)+'" text-anchor="end" font-size="9" fill="#aaa" font-family="Segoe UI,sans-serif">'+gl+'</text>');
+  }
+  // right Y labels
+  if(cfg.r2&&rvals.length){
+    for(var g=0;g<=gt;g++){
+      var gv=rmax*g/gt,gy=yR(gv);
+      var gl=cfg.r2f?cfg.r2f(gv):gv.toFixed(0);
+      o.push('<text x="'+(W-MR+4)+'" y="'+(gy+3.5).toFixed(1)+'" text-anchor="start" font-size="9" fill="#aaa" font-family="Segoe UI,sans-serif">'+gl+'</text>');
+    }
+  }
+  // X labels
+  for(var i=0;i<n;i++){
+    var lx=cfg.type==='line'?xL(i):xB(i);
+    o.push('<text x="'+lx.toFixed(1)+'" y="'+(H-4)+'" text-anchor="middle" font-size="9" fill="#aaa" font-family="Segoe UI,sans-serif">'+cfg.lbs[i]+'</text>');
+  }
+
+  // stacked bars
+  if(cfg.stacked){
+    var bases=new Array(n).fill(0);
+    cfg.sets.forEach(function(s){
+      for(var i=0;i<n;i++){
+        var v=s.data[i]||0;
+        var x=(xB(i)-CW/n*0.35).toFixed(1);
+        var bw=(CW/n*0.7).toFixed(1);
+        var y1=yL(bases[i]+v),y2=yL(bases[i]);
+        var bh=Math.max(1,(y2-y1).toFixed(1));
+        o.push('<rect x="'+x+'" y="'+y1.toFixed(1)+'" width="'+bw+'" height="'+bh+'" fill="'+s.color+'" rx="1"/>');
+        bases[i]+=v;
+      }
+    });
+  } else {
+    // regular bars (non-line datasets)
+    var barSets=cfg.sets.filter(function(s){return s.t==='bar'||(!s.t&&cfg.type!=='line');});
+    var nb=barSets.length||1;
+    var bw=CW/n*0.7/nb;
+    barSets.forEach(function(s,si){
+      for(var i=0;i<n;i++){
+        var v=s.data[i]; if(v==null)continue;
+        var col=(s.cols&&s.cols[i])?s.cols[i]:s.color;
+        var x=xB(i)-CW/n*0.35+si*bw;
+        var y=yL(v), bh=Math.max(1,yL(0)-y);
+        o.push('<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+(bw-1).toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+col+'" rx="2"/>');
+      }
+    });
+  }
+
+  // lines
+  var lineSets=cfg.sets.filter(function(s){return s.t==='line'||cfg.type==='line';});
+  lineSets.forEach(function(s){
+    var yFn=s.ax==='r'?yR:yL;
+    var xFn=cfg.type==='line'?xL:xB;
+    var pts=s.data.map(function(v,i){return v!=null?[xFn(i),yFn(v)]:null;});
+
+    // area fill for first line chart
+    if(cfg.type==='line'&&!s.dash){
+      var valid=pts.filter(Boolean);
+      if(valid.length>1){
+        var fd=valid.map(function(p,i){return(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1);}).join(' ');
+        fd+=' L'+valid[valid.length-1][0].toFixed(1)+' '+(MT+CH)+' L'+valid[0][0].toFixed(1)+' '+(MT+CH)+' Z';
+        o.push('<path d="'+fd+'" fill="'+s.color+'" fill-opacity="0.08"/>');
+      }
+    }
+
+    // line path
+    var d='',open=false;
+    pts.forEach(function(p){
+      if(!p){open=false;return;}
+      d+=(open?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)+' ';
+      open=true;
+    });
+    if(d) o.push('<path d="'+d+'" fill="none" stroke="'+s.color+'" stroke-width="'+(s.w||2.5)+'"'+(s.dash?' stroke-dasharray="5 3"':'')+' stroke-linecap="round" stroke-linejoin="round"/>');
+
+    // dots
+    pts.forEach(function(p){
+      if(!p)return;
+      o.push('<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(s.r||4)+'" fill="'+s.color+'" stroke="#fff" stroke-width="1.5"/>');
+    });
+  });
+
+  o.push('</svg>');
+  return o.join('');
+}
+
+/* ══════════════════════════════════
+   COMPUTED
+══════════════════════════════════ */
+function tots(){
+  var sp=S('spend'),msg=S('msg'),vis=S('vis'),ss=S('ss');
+  var ca=D.map(function(d){return d.cpmS;}).filter(Boolean);
+  var ct=D.map(function(d){return d.cpmT;}).filter(Boolean);
+  return{spend:sp,msg:msg,vis:vis,ss:ss,cpa:msg?ss/msg:0,
+    maxC:ca.length?Math.max.apply(null,ca):0,
+    minT:ct.length?Math.min.apply(null,ct):0};
+}
+
+/* ══════════════════════════════════
+   RENDER PIECES
+══════════════════════════════════ */
+function rKPI(t){
+  var rows=[
+    ['Загальний spend','$'+t.spend.toFixed(0),D.length+' місяців','#378ADD'],
+    ['DM повідомлень',''+t.msg,'сер. CAC $'+t.cpa.toFixed(2),'#E24B4A'],
+    ['Profile visits',t.vis.toLocaleString(),'від $0.05–0.13','#3B6D11'],
+    ['Макс CPM sales','$'+t.maxC.toFixed(2),'жовтень 2024','#E24B4A'],
+    ['Мін CPM traffic','$'+t.minT.toFixed(2),'трафік кампанія','#3B6D11'],
+    ['ROAS','—','не відстежується','#aaa'],
+  ];
+  return '<div class="kg">'+rows.map(function(r){
+    return '<div class="kc" style="border-top:3px solid '+r[3]+'">'+
+      '<p class="kl">'+r[0]+'</p>'+
+      '<p class="kv" style="color:'+(r[3]==='#aaa'?'#E24B4A':r[3])+'">'+r[1]+'</p>'+
+      '<p class="ks">'+r[2]+'</p></div>';
+  }).join('')+'</div>';
+}
+
+function rCharts(){
+  var lbs=D.map(function(d){return d.month.slice(0,6);});
+  var rc=D.map(function(d){return d.cpmS>=5?'#F09595':d.cpmS>=3.5?'#FAC775':'#5DCAA5';});
+
+  if(tab==='overview'){
+    var c1=chart({type:'line',lbs:lbs,yf:function(v){return'$'+v.toFixed(1);},sets:[
+      {data:D.map(function(d){return d.cpmS;}),color:'#E24B4A',w:2.5},
+      {data:D.map(function(d){return d.cpmT;}),color:'#378ADD',dash:true,w:2,r:3},
+    ]});
+    var c2=chart({type:'combo',lbs:lbs,r2:true,
+      yf:function(v){return v.toFixed(0);},r2f:function(v){return'$'+v.toFixed(0);},
+      sets:[
+        {t:'bar',data:D.map(function(d){return d.msg;}),color:'#7F77DD'},
+        {t:'line',data:D.map(function(d){return d.msg>0?+(d.ss/d.msg).toFixed(2):0;}),color:'#E24B4A',dash:true,ax:'r',w:2,r:4},
+      ]});
+    var c3=chart({type:'bar',lbs:lbs,
+      yf:function(v){return(v/1000).toFixed(0)+'K';},
+      sets:[{t:'bar',data:D.map(function(d){return d.reach;}),color:'#5DCAA5',cols:rc}]});
+    var c4=chart({stacked:true,lbs:lbs,yf:function(v){return'$'+v.toFixed(0);},sets:[
+      {data:D.map(function(d){return+d.ss.toFixed(0);}),color:'#E24B4A'},
+      {data:D.map(function(d){return+d.st.toFixed(0);}),color:'#378ADD'},
+    ]});
+    return '<div class="cg">'+
+      '<div class="cc"><p class="ct">CPM продаючих кампаній ($)</p>'+c1+'</div>'+
+      '<div class="cc"><p class="ct">DM повідомлення та CPA ($)</p>'+c2+'</div>'+
+      '<div class="cc"><p class="ct">Reach продаючих кампаній</p>'+c3+'</div>'+
+      '<div class="cc"><p class="ct">Spend: Продажі vs Трафік ($)</p>'+c4+'</div>'+
+    '</div>';
+  }
+  var c5=chart({type:'combo',lbs:lbs,r2:true,
+    yf:function(v){return v>999?(v/1000).toFixed(0)+'K':v.toFixed(0);},r2f:function(v){return v.toFixed(0);},
+    sets:[
+      {t:'bar',data:D.map(function(d){return d.vis;}),color:'#5DCAA5'},
+      {t:'line',data:D.map(function(d){return d.msg;}),color:'#7F77DD',ax:'r',w:2,r:4},
+    ]});
+  var c6=chart({stacked:true,lbs:lbs,yf:function(v){return'$'+v.toFixed(0);},sets:[
+    {data:D.map(function(d){return+d.ss.toFixed(0);}),color:'#E24B4A'},
+    {data:D.map(function(d){return+d.st.toFixed(0);}),color:'#378ADD'},
+  ]});
+  return '<div class="cg">'+
+    '<div class="cc"><p class="ct">Profile visits vs DM повідомлення</p>'+c5+'</div>'+
+    '<div class="cc"><p class="ct">Загальний spend по місяцях</p>'+c6+'</div>'+
+  '</div>';
+}
+
+function rCell(id,field,val){
+  if(editing&&editing.id===id&&editing.field===field)
+    return '<input class="ci" data-id="'+id+'" data-f="'+field+'" value="'+(val===null?'':val)+'" onblur="cm(this)" onkeydown="ck(event,this)">';
+  return '<span class="cv" onclick="se('+id+',\''+field+'\')" title="Редагувати">'+fn(val)+'</span>';
+}
+
+function rTable(t){
+  var hs=['Місяць','Spend $','DM msg','CPA $','CPM sales $','CPM traffic $','Reach sales','Profile visits','Spend sales $','Spend traffic $','Фаза',''];
+  var rows=D.map(function(d){
+    var cpa=d.msg>0?d.ss/d.msg:null;
+    var p=PH[ph(d.cpmS)];
+    return '<tr>'+
+      '<td>'+rCell(d.id,'month',d.month)+'</td>'+
+      '<td>'+rCell(d.id,'spend',d.spend)+'</td>'+
+      '<td style="font-weight:600;color:'+(d.msg>=55?'#3B6D11':d.msg<=44?'#E24B4A':'#BA7517')+'">'+rCell(d.id,'msg',d.msg)+'</td>'+
+      '<td style="color:'+(cpa&&cpa>5.5?'#E24B4A':'#444')+'">'+(cpa?'$'+cpa.toFixed(2):'—')+'</td>'+
+      '<td style="font-weight:600;color:'+cc(d.cpmS)+'">'+rCell(d.id,'cpmS',d.cpmS)+'</td>'+
+      '<td>'+rCell(d.id,'cpmT',d.cpmT)+'</td>'+
+      '<td>'+rCell(d.id,'reach',d.reach)+'</td>'+
+      '<td>'+rCell(d.id,'vis',d.vis)+'</td>'+
+      '<td>'+rCell(d.id,'ss',d.ss)+'</td>'+
+      '<td>'+rCell(d.id,'st',d.st)+'</td>'+
+      '<td><span class="bdg" style="background:'+p[1]+';color:'+p[2]+'">'+p[0]+'</span></td>'+
+      '<td><span class="dx" onclick="dr('+d.id+')">✕</span></td>'+
+    '</tr>';
+  }).join('');
+  var rs=D.reduce(function(a,d){return a+d.reach;},0);
+  return '<div class="tw"><table>'+
+    '<thead><tr>'+hs.map(function(h){return'<th>'+h+'</th>';}).join('')+'</tr></thead>'+
+    '<tbody>'+rows+'</tbody>'+
+    '<tfoot><tr>'+
+      '<td>РАЗОМ</td><td>$'+t.spend.toFixed(2)+'</td><td>'+t.msg+'</td><td>$'+t.cpa.toFixed(2)+'</td>'+
+      '<td>—</td><td>—</td>'+
+      '<td>'+rs.toLocaleString()+'</td>'+
+      '<td>'+t.vis.toLocaleString()+'</td>'+
+      '<td>$'+t.ss.toFixed(2)+'</td>'+
+      '<td>$'+S('st').toFixed(2)+'</td>'+
+      '<td>—</td><td></td>'+
+    '</tr></tfoot></table></div>';
+}
+
+function rForm(){
+  if(!showAdd)return '<button class="ab" onclick="ta(true)">+ Додати місяць</button>';
+  var fs=[['month','Назва місяця','text'],['spend','Spend $','number'],['msg','DM повідомлень','number'],
+    ['cpmS','CPM sales $','number'],['cpmT','CPM traffic $','number'],
+    ['reach','Reach sales','number'],['vis','Profile visits','number'],
+    ['ss','Spend sales $','number'],['st','Spend traffic $','number']];
+  return '<div class="fw"><p class="sl" style="margin-bottom:10px">Новий місяць</p>'+
+    '<div class="fg">'+fs.map(function(f){
+      return '<div><label class="fl">'+f[1]+'</label><input type="'+f[2]+'" id="nf_'+f[0]+'" class="fi"></div>';
+    }).join('')+'</div>'+
+    '<div style="display:flex;gap:8px">'+
+      '<button class="ab" onclick="da()">Додати</button>'+
+      '<button class="xb" onclick="ta(false)">Скасувати</button>'+
+    '</div></div>';
+}
+
+/* ══════════════════════════════════
+   MAIN RENDER
+══════════════════════════════════ */
+function render(){
+  var t=tots();
+  document.getElementById('app').innerHTML=
+    '<div class="header">'+
+      '<div><h1>Meta Ads Аудит — Чічіко</h1><p class="sub">Жовтень 2024 — Квітень 2025 · Клікни значення в таблиці щоб редагувати</p></div>'+
+      '<div class="tabs">'+
+        '<button class="tab'+(tab==='overview'?' on':'')+'" onclick="st(\'overview\')">Огляд</button>'+
+        '<button class="tab'+(tab==='table'?' on':'')+'" onclick="st(\'table\')">Таблиця</button>'+
+      '</div>'+
+    '</div>'+
+    rKPI(t)+
+    rCharts()+
+    '<p class="sl">Дані по місяцях — клікни клітинку щоб редагувати</p>'+
+    rTable(t)+
+    rForm()+
+    '<p class="note">CPA = Spend sales ÷ Messages автоматично · Фаза: CPM ≥ 5 = Хаос · ≤ 3.5 = Ефективно · між = Деградація · Enter або клік поруч — зберегти</p>';
+
+  if(editing){
+    var i=document.querySelector('.ci');
+    if(i){i.focus();try{var l=i.value.length;i.setSelectionRange(l,l);}catch(e){}}
+  }
+}
+
+/* ══════════════════════════════════
+   EVENTS
+══════════════════════════════════ */
+function st(t2){tab=t2;render();}
+function ta(v){showAdd=v;render();}
+function se(id,f){editing={id:id,field:f};render();}
+function cm(inp){
+  if(!editing)return;
+  var n=parseFloat(inp.value);
+  D=D.map(function(d){
+    if(d.id!==editing.id)return d;
+    var u={}; for(var k in d)u[k]=d[k];
+    u[editing.field]=isNaN(n)?inp.value:n;
+    return u;
+  });
+  editing=null;render();
+}
+function ck(e,inp){
+  if(e.key==='Enter'){e.preventDefault();cm(inp);}
+  if(e.key==='Escape'){editing=null;render();}
+}
+function dr(id){D=D.filter(function(d){return d.id!==id;});render();}
+function da(){
+  var g=function(f){var el=document.getElementById('nf_'+f);return el?el.value:'';};
+  D.push({id:Date.now(),month:g('month')||'Новий місяць',
+    spend:+g('spend')||0,msg:+g('msg')||0,
+    cpmS:+g('cpmS')||0,cpmT:+g('cpmT')||null,
+    reach:+g('reach')||0,vis:+g('vis')||0,
+    ss:+g('ss')||0,st:+g('st')||0});
+  showAdd=false;render();
+}
+
+render();
+</script>
+</body>
+</html>
